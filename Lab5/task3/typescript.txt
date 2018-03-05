@@ -1,0 +1,96 @@
+**
+* Darius Jones
+* Lab 5 Task 3
+* 2/25/2018
+**/
+
+root@kali:~/Desktop/task3# gcc -g sched_sim.c -o s
+root@kali:~/Desktop/task3# ./s < RR.txt
+T0:
+CPU: P1[15]
+QUEUE: 
+
+T2:
+CPU: P1[13]
+QUEUE: P2[6] 
+
+T5:
+CPU: P1[10]
+QUEUE: P2[6] P3[2] 
+
+T10:
+CPU: P2[6]
+QUEUE: P1[5] P3[2] 
+
+T16:
+CPU: P3[2]
+QUEUE: P1[5] 
+
+T18:
+CPU: P1[5]
+QUEUE: 
+
+T23:
+CPU: <IDLE>
+QUEUE: 
+
+AVERAGE WAITING TIME: 9.67
+root@kali:~/Desktop/task3# ./s < FCFS.txt
+T0:
+CPU: P1[15]
+QUEUE: 
+
+T2:
+CPU: P1[13]
+QUEUE: P2[6] 
+
+T5:
+CPU: P1[10]
+QUEUE: P2[6] P3[2] 
+
+T15:
+CPU: P2[6]
+QUEUE: P3[2] 
+
+T21:
+CPU: P3[2]
+QUEUE: 
+
+AVERAGE WAITING TIME: 10.33
+root@kali:~/Desktop/task3# ./s < SJF.txt
+T0:
+CPU: P1[15]
+QUEUE: 
+
+T2:
+CPU: P1[13]
+QUEUE: P2[6] 
+
+T5:
+CPU: P1[10]
+QUEUE: P2[6] P3[2] 
+
+T15:
+CPU: P3[2]
+QUEUE: P2[6] 
+
+T17:
+CPU: P2[6]
+QUEUE: 
+
+AVERAGE WAITING TIME: 9.33
+root@kali:~/Desktop/task3# ./s < SRTF.txt
+T0:
+CPU: P1[15]
+QUEUE: 
+
+T2:
+CPU: P2[4]
+QUEUE: P1[15] 
+
+T5:
+CPU: P2[3]
+QUEUE: P1[15] 
+
+AVERAGE WAITING TIME: 3.33
+root@kali:~/Desktop/task3# 

@@ -1,0 +1,57 @@
+/**
+* Darius Jones
+* Lab 5 Task 1
+* 2/22/2018
+**/
+
+root@kali:~/Desktop/task1# gcc -g averaging.c -o a
+root@kali:~/Desktop/task1# ./a < input.txt
+Please enter alpha value:
+Burst 0 is: 2
+Tau 0 is: 2.00
+Burst 1 is: 6
+Tau 1 is: 4.00
+Burst 2 is: 4
+Tau 2 is: 4.00
+Burst 3 is: 8
+Tau 3 is: 6.00
+Burst 4 is: 5
+Tau 4 is: 5.50
+Burst 5 is: 8
+Tau 5 is: 6.75
+Burst 6 is: 7
+Tau 6 is: 6.88
+root@kali:~/Desktop/task1# ./a < input1.txt
+Please enter alpha value:
+Burst 0 is: 2
+Tau 0 is: 2.00
+Burst 1 is: 6
+Tau 1 is: 5.00
+Burst 2 is: 4
+Tau 2 is: 4.25
+Burst 3 is: 8
+Tau 3 is: 7.06
+Burst 4 is: 5
+Tau 4 is: 5.52
+Burst 5 is: 8
+Tau 5 is: 7.38
+Burst 6 is: 7
+Tau 6 is: 7.09
+root@kali:~/Desktop/task1# ./a < input2.txt
+Please enter alpha value:
+Burst 0 is: 2
+Tau 0 is: 2.00
+Burst 1 is: 6
+Tau 1 is: 3.00
+Burst 2 is: 4
+Tau 2 is: 3.25
+Burst 3 is: 8
+Tau 3 is: 4.44
+Burst 4 is: 5
+Tau 4 is: 4.58
+Burst 5 is: 8
+Tau 5 is: 5.43
+Burst 6 is: 7
+Tau 6 is: 5.83
+root@kali:~/Desktop/task1# 
+

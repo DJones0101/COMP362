@@ -1,0 +1,8 @@
+/**
+* Darius Jones
+* Lab 5 Task 2
+* 2/23/2018
+**/
+
+I saw that the threads with high priority finished first and in some cases they interruppted medium priority threads. The medium priority threads ran next followed by
+low priority. I expected high priority to finish, then medium then low. This was not the case. 
