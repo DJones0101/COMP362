@@ -1,0 +1,46 @@
+/**
+* Darius Jones
+* Lab 4 Task 4
+* 2/16/2018
+**/
+
+
+darius@darius-VirtualBox:~/Desktop/task4$ gcc -g  matrix3.c -o m -lpthread
+darius@darius-VirtualBox:~/Desktop/task4$ ./m input.txt
+MATRIX A
+1 4 
+2 5 
+3 6 
+MATRIX B
+8 7 6 
+5 4 3 
+MATRIX  A x B
+28 23 18 
+41 34 27 
+54 45 36 
+darius@darius-VirtualBox:~/Desktop/task4$ ./m input1.txt
+MATRIX A
+4 7 
+1 8 
+4 5 
+1 1 
+MATRIX B
+7 8 6 
+4 7 3 
+MATRIX  A x B
+56 81 45 
+39 64 30 
+48 67 39 
+11 15 9 
+darius@darius-VirtualBox:~/Desktop/task4$ ./m input2.txt
+MATRIX A
+2 
+4 
+6 
+MATRIX B
+8 10 12 
+MATRIX  A x B
+16 20 24 
+32 40 48 
+48 60 72 
+darius@darius-VirtualBox:~/Desktop/task4$ 

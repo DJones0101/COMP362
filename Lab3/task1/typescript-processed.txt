@@ -1,0 +1,20 @@
+/**
+* Darius Jones
+* Lab 3 Task 1
+* 2/8/2018
+**/
+
+Script started on Thu 08 Feb 2018 03:51:12 PM PST
+darius@darius-VirtualBox:~/Desktop/task1$ gcc -g proc_hier.c -o proc
+darius@darius-VirtualBox:~/Desktop/task1$ ./proc proc_hier.c -o proc
+1 PID: 2264
+1.1 PID: 2265
+1.1.1 PID: 2266
+1.1.2 PID: 2267
+1.2 PID: 2268
+1.2.1 PID: 2269
+1.2.2 PID: 2270
+darius@darius-VirtualBox:~/Desktop/task1$ exit-g proc_hier.c -o proc
+exit
+
+Script done on Thu 08 Feb 2018 03:51:29 PM PST

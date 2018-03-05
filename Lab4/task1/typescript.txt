@@ -1,0 +1,16 @@
+/**
+* Darius Jones
+* Lab 4 Task 1
+* 2/15/2018
+**/
+
+
+darius@darius-VirtualBox:~/Desktop/task1$ gcc -g threadCreationTest.c -o t -lpthread
+darius@darius-VirtualBox:~/Desktop/task1$ ./t
+Fork Total time = 0.001692 seconds
+Thread Total time = 0.000372 seconds
+Threads ran about 4.5 times faster than forking.
+Threads are about 4 times faster than forking.
+Forking creates it's own independent copy of the parent process.
+Copying is the primary reason why forking is slower Threads on the other hand share memory space.
+darius@darius-VirtualBox:~/Desktop/task1$ 

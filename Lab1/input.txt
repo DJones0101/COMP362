@@ -1,0 +1,9 @@
+8
+Wood 1.00
+Coal 2.50
+Copper 5.00
+Iron 10.00
+Steel 15.00
+Silver 25.00
+Gold 50.00
+Diamond 100.00

@@ -1,0 +1,32 @@
+/**
+* Darius Jones
+* Lab 3 Task 3
+* 2/8/2018
+**/
+
+darius@darius-VirtualBox:~/Desktop/DariusJonesLab3Task3$ gcc -g npipe.c -o p
+darius@darius-VirtualBox:~/Desktop/DariusJonesLab3Task3$ ./p
+creating FIFO
+set to sender mode
+<send>: hello there, how's the weather in Mississippi?
+<send>: switch
+switching to receiver mode
+<received>: It actually gets cold this time of year.Today its 10 degrees.
+<received>: switch
+switching to sender mode
+<send>: in F or C.
+<send>: switch
+switching to receiver mode
+<received>: in Celsius.
+<received>: switch
+switching to sender mode
+<send>: Whoa, that's -12.222. That's cold.
+<send>: switch
+switching to receiver mode
+<received>: I have to finish homework catch you later.
+<received>: switch
+switching to sender mode
+<send>: ttyl
+<send>: quit
+quiting program
+darius@darius-VirtualBox:~/Desktop/DariusJonesLab3Task3$

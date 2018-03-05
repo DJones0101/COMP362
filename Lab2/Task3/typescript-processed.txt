@@ -1,0 +1,46 @@
+/**
+* Darius Jones
+* Lab 2 Task 3
+* 2/2/2018
+**/
+
+Script started on Fri 02 Feb 2018 04:58:46 PM PST
+darius@darius-VirtualBox:~/Dbskdo-h sub a z -f
+sub replaced_char replacement_char [-f input_file] [-o output_file]
+darius@darius-VirtualBox:~/Desktop$ sub z -o
+sub replaced_char replacement_char [-f input_file] [-o output_file]
+darius@darius-VirtualBox:~/Desktop$ sub a z -f
+sub replaced_char replacement_char [-f input_file] [-o output_file]
+darius@dariusuboan+u-flinput.txtotsubtx-o>z -f
+D+rius Jones
+K+ori Ar+i Jones
+D+vid Jones
+S+v+nn+h Jones
+Tw+nice Jones
+
+darius@darius-Virtuubtin7t-ftinput.txtx-o>z -f input.txt
+darius@darius-VirtualBox:~/Desktop$ cat n.txt
+Dar7us Jones
+Kaor7 Ara7 Jones
+Dav7d Jones
+Savannah Jones
+Twan7ce Jones
+
+darius@darius-VirtualBox:~/Desktop$ sub a 1
+Darius Jones Kaori Jones David Jones
+D1rius Jones K1ori Jones D1vid Jones
+darius@darius-VirtualBox:~/Desktop$ sub i 4 -o s.txt
+darius jones kaori jones david jones
+darius@darius-VirtualBox:~/Desktop$ cat s.txt
+dar4us jones kaor4 jones dav4d jones
+darius@darius-VirtualBox:~/Desktop$ sub s @n<uinput.txte>.new.txt
+darius@darius-VirtualBox:~/Desktop$ cat new
+cat: new: No such file or directory
+darius@darius-VirtualBox:~/Desktop$ cat new.txt
+Dariu@ Jone@
+darius@darius-VirtualBox:~/Desktop$ sub f
+sub replaced_char replacement_char [-f input_file] [-o output_file]
+darius@darius-VirtualBox:~/Desktop$ exit
+exit
+
+Script done on Fri 02 Feb 2018 05:04:06 PM PST

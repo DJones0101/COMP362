@@ -1,0 +1,31 @@
+/**
+* Darius Jones
+* Lab 3 Task 3
+* 2/8/2018
+**/
+
+darius@darius-VirtualBox:~/Desktop/DariusJonesLab3Task3$ ./p
+FIFO exist
+set to receiver mode
+<received>: hello there, how's the weather in Mississippi?
+<received>: switch
+switching to sender mode
+<send>: It actually gets cold this time of year.Today its 10 degrees.
+<send>: switch
+switching to receiver mode
+<received>: in F or C.
+<received>: switch
+switching to sender mode
+<send>: in Celsius.
+<send>: switch
+switching to receiver mode
+<received>: Whoa, that's -12.222. That's cold.
+<received>: switch
+switching to sender mode
+<send>: I have to finish homework catch you later.
+<send>: switch
+switching to receiver mode
+<received>: ttyl
+<received>: quit
+quiting program
+darius@darius-VirtualBox:~/Desktop/DariusJonesLab3Task3

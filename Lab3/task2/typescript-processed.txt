@@ -1,0 +1,34 @@
+/**
+* Darius Jones
+* Lab 3 Task 1
+* 2/8/2018
+**/
+
+Script started on Fri 09 Feb 2018 02:41:27 PM PST
+darius@darius-VirtualBox:~/Desktop$ gcc -g pipe.c -o pipe
+darius@darius-VirtualBox:~/Desktop$ ./pipe 
+(child pid: 3742) Enter text or "stop": hi
+
+(parent pid: 3741) received: hi
+(child pid: 3742) Enter text or "stop": hello world
+
+(parent pid: 3741) received: hello world
+(child pid: 3742) Enter text or "stop": hello cruel world
+
+(parent pid: 3741) received: hello cruel world
+(child pid: 3742) Enter text or "stop": aint no lie
+
+(parent pid: 3741) received: aint no lie
+(child pid: 3742) Enter text or "stop": baby
+
+(parent pid: 3741) received: baby
+(child pid: 3742) Enter text or "stop": bye bye bye
+
+(parent pid: 3741) received: bye bye bye
+(child pid: 3742) Enter text or "stop": stop
+(child pid: 3742): stopping
+(parent pid: 3741): stopping
+darius@darius-VirtualBox:~/Desktop$ exit
+exit
+
+Script done on Fri 09 Feb 2018 02:43:10 PM PST
