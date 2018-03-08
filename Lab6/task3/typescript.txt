@@ -1,0 +1,145 @@
+/*
+* Darius Jones
+* Lab 6 Task 3
+* 3/2/2018
+*/
+
+root@kali:~/Documents/COMP362/Lab6/task3# gcc -g monitor.c -o m -lpthread
+root@kali:~/Documents/COMP362/Lab6/task3# ./m 5
+Philsopher 0 sits at the table.
+Philsopher 2 sits at the table.
+Philsopher 3 sits at the table.
+Philsopher 4 sits at the table.
+Philsopher 1 sits at the table.
+Philsopher 3 gets hungry for the 1 time!
+Philsopher 3 grabbed the chopsticks and is eating
+Philsopher 3 has returned chopsticks
+Philsopher 3 is thinking
+Philsopher 3 finished turn 1
+Philsopher 3 gets hungry for the 2 time!
+Philsopher 3 grabbed the chopsticks and is eating
+Philsopher 3 has returned chopsticks
+Philsopher 3 is thinking
+Philsopher 3 finished turn 2
+Philsopher 3 gets hungry for the 3 time!
+Philsopher 3 grabbed the chopsticks and is eating
+Philsopher 3 has returned chopsticks
+Philsopher 3 is thinking
+Philsopher 3 finished turn 3
+Philsopher 3 gets hungry for the 4 time!
+Philsopher 3 grabbed the chopsticks and is eating
+Philsopher 3 has returned chopsticks
+Philsopher 3 is thinking
+Philsopher 3 finished turn 4
+Philsopher 3 gets hungry for the 5 time!
+Philsopher 3 grabbed the chopsticks and is eating
+Philsopher 3 has returned chopsticks
+Philsopher 4 gets hungry for the 1 time!
+Philsopher 3 is thinking
+Philsopher 3 finished turn 5
+>>>>>> Philsopher 3 finished meal. <<<<<<
+Philsopher 4 grabbed the chopsticks and is eating
+Philsopher 4 has returned chopsticks
+Philsopher 4 is thinking
+Philsopher 4 finished turn 1
+Philsopher 4 gets hungry for the 2 time!
+Philsopher 4 grabbed the chopsticks and is eating
+Philsopher 4 has returned chopsticks
+Philsopher 4 is thinking
+Philsopher 4 finished turn 2
+Philsopher 4 gets hungry for the 3 time!
+Philsopher 4 grabbed the chopsticks and is eating
+Philsopher 4 has returned chopsticks
+Philsopher 4 is thinking
+Philsopher 4 finished turn 3
+Philsopher 4 gets hungry for the 4 time!
+Philsopher 4 grabbed the chopsticks and is eating
+Philsopher 4 has returned chopsticks
+Philsopher 4 is thinking
+Philsopher 4 finished turn 4
+Philsopher 4 gets hungry for the 5 time!
+Philsopher 4 grabbed the chopsticks and is eating
+Philsopher 4 has returned chopsticks
+Philsopher 4 is thinking
+Philsopher 4 finished turn 5
+>>>>>> Philsopher 4 finished meal. <<<<<<
+Philsopher 2 gets hungry for the 1 time!
+Philsopher 2 grabbed the chopsticks and is eating
+Philsopher 2 has returned chopsticks
+Philsopher 2 is thinking
+Philsopher 2 finished turn 1
+Philsopher 2 gets hungry for the 2 time!
+Philsopher 2 grabbed the chopsticks and is eating
+Philsopher 2 has returned chopsticks
+Philsopher 2 is thinking
+Philsopher 2 finished turn 2
+Philsopher 2 gets hungry for the 3 time!
+Philsopher 2 grabbed the chopsticks and is eating
+Philsopher 2 has returned chopsticks
+Philsopher 2 is thinking
+Philsopher 2 finished turn 3
+Philsopher 2 gets hungry for the 4 time!
+Philsopher 2 grabbed the chopsticks and is eating
+Philsopher 2 has returned chopsticks
+Philsopher 2 is thinking
+Philsopher 2 finished turn 4
+Philsopher 2 gets hungry for the 5 time!
+Philsopher 2 grabbed the chopsticks and is eating
+Philsopher 1 gets hungry for the 1 time!
+Philsopher 2 has returned chopsticks
+Philsopher 2 is thinking
+Philsopher 2 finished turn 5
+Philsopher 1 grabbed the chopsticks and is eating
+Philsopher 1 has returned chopsticks
+Philsopher 1 is thinking
+Philsopher 1 finished turn 1
+Philsopher 1 gets hungry for the 2 time!
+Philsopher 1 grabbed the chopsticks and is eating
+Philsopher 1 has returned chopsticks
+Philsopher 1 is thinking
+Philsopher 1 finished turn 2
+Philsopher 1 gets hungry for the 3 time!
+Philsopher 1 grabbed the chopsticks and is eating
+Philsopher 1 has returned chopsticks
+Philsopher 1 is thinking
+Philsopher 1 finished turn 3
+Philsopher 1 gets hungry for the 4 time!
+Philsopher 1 grabbed the chopsticks and is eating
+>>>>>> Philsopher 2 finished meal. <<<<<<
+Philsopher 1 has returned chopsticks
+Philsopher 1 is thinking
+Philsopher 1 finished turn 4
+Philsopher 1 gets hungry for the 5 time!
+Philsopher 1 grabbed the chopsticks and is eating
+Philsopher 1 has returned chopsticks
+Philsopher 1 is thinking
+Philsopher 1 finished turn 5
+>>>>>> Philsopher 1 finished meal. <<<<<<
+Philsopher 0 gets hungry for the 1 time!
+Philsopher 0 grabbed the chopsticks and is eating
+Philsopher 0 has returned chopsticks
+Philsopher 0 is thinking
+Philsopher 0 finished turn 1
+Philsopher 0 gets hungry for the 2 time!
+Philsopher 0 grabbed the chopsticks and is eating
+Philsopher 0 has returned chopsticks
+Philsopher 0 is thinking
+Philsopher 0 finished turn 2
+Philsopher 0 gets hungry for the 3 time!
+Philsopher 0 grabbed the chopsticks and is eating
+Philsopher 0 has returned chopsticks
+Philsopher 0 is thinking
+Philsopher 0 finished turn 3
+Philsopher 0 gets hungry for the 4 time!
+Philsopher 0 grabbed the chopsticks and is eating
+Philsopher 0 has returned chopsticks
+Philsopher 0 is thinking
+Philsopher 0 finished turn 4
+Philsopher 0 gets hungry for the 5 time!
+Philsopher 0 grabbed the chopsticks and is eating
+Philsopher 0 has returned chopsticks
+Philsopher 0 is thinking
+Philsopher 0 finished turn 5
+>>>>>> Philsopher 0 finished meal. <<<<<<
+Dinner is no more.
+root@kali:~/Documents/COMP362/Lab6/task3# 

@@ -50,8 +50,10 @@ int main(int argc, char *argv[]) {
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 	pthread_t seats[NUM_OF_PHILOSOPHERS];
 	struct param_data *data;
+	pthread_mutex_init(&mutex, NULL);
 
 	int philosopher;
+	
 	for (philosopher = 0; philosopher < NUM_OF_PHILOSOPHERS; philosopher++) {
 		data = (struct param_data* )malloc(sizeof(param_data));
 		data->philo_id = philosopher;
@@ -63,6 +65,7 @@ int main(int argc, char *argv[]) {
 
 		pthread_join(seats[philosopher], NULL);
 	}
+	pthread_mutex_destroy(&mutex);
 	printf ("Dinner is no more.\n");
 
 	return 0;
