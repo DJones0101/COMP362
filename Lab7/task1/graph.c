@@ -20,11 +20,13 @@ char commands_in[STRING_MAX_SIZE];
 char command1[STRING_MAX_SIZE], command2[STRING_MAX_SIZE], command3[STRING_MAX_SIZE];
 
 
+
 int get_index_of_vertex(char *vertex_name);
 void add_vertex(char *vertex_name);
 void add_edge(char *from_vertex_name, char *to_vertex_name);
 void remove_edge(char *from_vertex_name, char *to_vertex_name);
 int get_command_indexes(char *commands);
+bool DFS(bool adjacency_matrix[][MAX_NUMBER_OF_VERTICES], bool visited[number_of_vertices], int index);
 void display_adjacency_matrix();
 bool check_for_cycle();
 void display_help();
@@ -53,7 +55,8 @@ int main(int argc, char *argv[]) {
 		case ADD_EDGE: fscanf(stdin, "%s %s", command1, command2); add_edge(command1, command2); break;
 		case REMOVE_EDGE: fscanf(stdin, "%s %s", command1, command2); remove_edge(command1, command2); break;
 		case DISPLAY: display_adjacency_matrix(); break;
-		case CHECK: break; //if(check_for_cycle() == true){printf(">> DEADLOCKED <<\n")}else{printf(">> NO DEADLOCK <<\n")};
+		case CHECK: 
+		if(check_for_cycle() == false){printf(">> DEADLOCKED <<\n");}else{printf(">> NO DEADLOCK <<\n");};break;
 		case HELP: display_help(); break;
 		case QUIT: printf("Exiting the program.\n"); exit(EXIT_SUCCESS);
 		default: printf("Invalid Command\n"); break;
@@ -196,17 +199,9 @@ void display_adjacency_matrix() {
 }
 
 bool check_for_cycle() {
-	int row, col;
-	bool previous;
 
-	for(row = 1; row < number_of_vertices; row++){
-		adjacency_matrix[row][col];
-		for(col = 0; col < number_of_vertices; col++){
-			if(){
-
-			}
-		}
-	}
+	bool visited[number_of_vertices];
+	return DFS(adjacency_matrix,visited,0);
 }
 
 int get_command_indexes(char *commands) {
@@ -267,3 +262,22 @@ void free_names() {
 	}
 
 }
+
+bool DFS(bool adjacency_matrix[][MAX_NUMBER_OF_VERTICES], bool visited[number_of_vertices], int index) {
+
+	if(visited[index] == true){
+		return false;
+	}
+
+	int row;
+	visited[index] = true;
+
+	for (row = 0; row < number_of_vertices; row++) {
+		if (visited[row] == false && adjacency_matrix[index][row] == true) {
+			DFS(adjacency_matrix, visited, row);
+		} 
+	}
+
+	return true;
+}
+

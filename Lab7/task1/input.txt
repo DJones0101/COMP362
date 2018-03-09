@@ -1,5 +1,20 @@
 add vertex a
 add vertex b
 add vertex a
+add vertex c
+add edge a b
+add edge b c
+add edge c a
 display
+check
+remove edge c a
+check 
+display
+add vertex d
+add edge c d
+display
+check
+add edge c a
+display
+check
 quit
