@@ -12,17 +12,19 @@
 #define STRING_MAX_SIZE 50
 #define MAX_NUMBER_OF_VERTICES 20
 
-enum {ADD_VERTEX = 0, ADD_EDGE, REMOVE_EDGE, DISPLAY, CHECK, HELP, QUIT, INPUT_ERROR} commands;
+enum {ADD_VERTEX = 0, ADD, ADD_EDGE, REMOVE_EDGE, DISPLAY, CHECK, HELP, QUIT, INPUT_ERROR} commands;
 char *vertex_names[MAX_NUMBER_OF_VERTICES];
 bool adjacency_matrix[MAX_NUMBER_OF_VERTICES][MAX_NUMBER_OF_VERTICES];
 int number_of_vertices = 0;
 char commands_in[STRING_MAX_SIZE];
+char command1[STRING_MAX_SIZE], command2[STRING_MAX_SIZE], command3[STRING_MAX_SIZE];
+
 
 int get_index_of_vertex(char *vertex_name);
 void add_vertex(char *vertex_name);
 void add_edge(char *from_vertex_name, char *to_vertex_name);
 void remove_edge(char *from_vertex_name, char *to_vertex_name);
-int get_command_indexes(char commands[]);
+int get_command_indexes(char *commands);
 void display_adjacency_matrix();
 bool check_for_cycle();
 void display_help();
@@ -30,23 +32,43 @@ void free_names();
 
 
 int main(int argc, char *argv[]) {
+	int count;
+	for (count = 0; count < STRING_MAX_SIZE; count++) {vertex_names[count] = malloc(sizeof(char) * STRING_MAX_SIZE);}
+	int index;
 
 	while (true) {
+
 		printf("Enter a command: ");
 		fscanf(stdin, "%s", commands_in);
-		commands_in[strcspn(commands_in, "\n")] = '\0'; // removes \n
 
 		switch (get_command_indexes(commands_in)) {
-		case ADD_VERTEX: break;// fscanf(stdin,"%s") get the next string call add_vertex() break;
-		case ADD_EDGE: break; // fscanf(stdin,"%s %s") get the  next 2 strings call add edge
+
+		case ADD:
+
+			fscanf(stdin, "%s", command1);
+			index = get_command_indexes(command1);
+
+			if ( index == ADD_VERTEX) { // add vertex Aaa
+				//memset(&command2[0], 0, sizeof(command2));
+				fscanf(stdin, "%s", command2);
+				add_vertex(command2);
+
+
+			} else if (index == ADD_EDGE) { // add edge Aaa Bbbb
+
+				fscanf(stdin, "%s %s", command2, command3);
+				add_edge(command2, command3);
+			} else if (index == INPUT_ERROR) {
+				printf("Invalid Command\n"); break;
+			}
+
+			break;
 		case REMOVE_EDGE: break; //fscanf(stdin,"%s %s")  get the next 2 strings call remove_edge() break;
-		case DISPLAY: break; // call display_adjacency_matrix() break;
+		case DISPLAY: display_adjacency_matrix(); break;
 		case CHECK: break; //if(check_for_cycle() == true){printf(">> DEADLOCKED <<\n")}else{printf(">> NO DEADLOCK <<\n")};
 		case HELP: display_help(); break;
 		case QUIT: printf("Exiting the program.\n"); exit(EXIT_SUCCESS);
-		case INPUT_ERROR: printf("Invalid command\n"); break;
-		default: printf(" Invalid command\n");
-
+		default: printf("Invalid Command\n"); break;
 		}
 	}
 
@@ -59,8 +81,22 @@ int get_index_of_vertex(char *vertex_name) {
 
 void add_vertex(char *vertex_name) {
 
-	// "maybe"
-	// add the vertex name to the char *vertex_names[]
+	if (number_of_vertices == MAX_NUMBER_OF_VERTICES) {
+		printf("The maximum limit of vertices (20) has been already reached.\n");
+		return;
+	} else {
+
+		int count;
+		for (count = 0; count < number_of_vertices; count++) {
+			if (strcmp(vertex_names[count], vertex_name) == 0) {
+				printf("There is already a vertex with the name %s.\n", vertex_name);
+				return;
+			}
+
+		}
+		strcpy(vertex_names[number_of_vertices], vertex_name);
+		number_of_vertices++;
+	}
 
 
 }
@@ -81,45 +117,80 @@ void remove_edge(char *from_vertex_name, char *to_vertex_name) {
 }
 
 void display_adjacency_matrix() {
-	int row;
-	int col;
-	// if graph is empty 
-	// printf("Unable to display adjacency matrix. There are no vertices yet.")
 
-	/*
-	for(row = 0; row < MAX_NUMBER_OF_VERTICES; row++){
+	if (number_of_vertices == 0) {
 
-		printf("%s ", vertex_names[row]);
+		printf("Unable to display adjacency matrix. There are no vertices yet\n");
+		return;
 
-		for(col = 0; col < MAX_NUMBER_OF_VERTICES; col++){
+	} else {
 
-			printf("%s ",vertex_names[col]);
-			printf("%d ", adjacency_matrix[row][col]);
-			first row and first col is the names	
+		int count;
+		
+		for (count = 0; count < number_of_vertices; count++) {
+			printf("\t");
+			printf("%-10s", vertex_names[count]);
+		}printf("\n");
 
+		int row;
+		int col;
+		count = 0;
+		for (row = 0; row < number_of_vertices; row++) {
+			printf("\t");
+			printf("%s ",vertex_names[count]);
+
+			for (col = 0; col < number_of_vertices; col++) {
+
+				
+				if (adjacency_matrix[row][col] == true) {
+					printf("%-10d", 1);
+				} else {
+					printf("%-10d", 0);
+				}
+
+			}
+			count++;
+			printf("\n");
 		}
-		printf("\n");
-	}*/
+
+	}
 }
 
 bool check_for_cycle() {
 
 }
 
-int get_command_indexes(char commands[]) {
+int get_command_indexes(char *commands) {
 
-	if (strcmp(commands, "add vertex") == 0) {
+	if (strcmp(commands, "vertex") == 0) {
+
 		return ADD_VERTEX;
-	} else if ( strcmp(commands, "add edge") == 0) {
+
+	} else if ( strcmp(commands, "edge") == 0) {
+
 		return ADD_EDGE;
+
 	} else if ( strcmp(commands, "remove edge") == 0) {
+
 		return REMOVE_EDGE;
+
 	} else if ( strcmp(commands, "check") == 0) {
+
 		return CHECK;
+
 	} else if ( strcmp(commands, "help") == 0) {
+
 		return HELP;
-	} else if (strcmp(commands, "quit") == 0) {
+
+	} else if (strcmp(commands, "add") == 0) {
+
+		return ADD;
+	}
+	else if (strcmp(commands, "quit") == 0) {
+
 		return QUIT;
+	} else if (strcmp(commands, "display") == 0) {
+		return DISPLAY;
 	}
 
 	return INPUT_ERROR;

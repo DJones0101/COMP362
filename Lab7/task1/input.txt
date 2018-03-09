@@ -1,0 +1,5 @@
+add vertex a
+add vertex b
+add vertex a
+display
+quit

@@ -1,0 +1,5 @@
+Enter a command: Enter a command: Enter a command: There is already a vertex with the name a.
+Enter a command: a         b         
+a          1         a          1         
+b          1         b          1         
+Enter a command: Exiting the program.
