@@ -1,0 +1,62 @@
+Script started on 2018-03-09 16:49:45-0800
+]0;root@kali: ~/Documents/COMP362/Lab7/task1[01;31mroot@kali[00m:[01;34m~/Documents/COMP362/Lab7/task1[00m# ./gremove edge d a./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g
+]0;root@kali: ~/Documents/COMP362/Lab7/task1[01;31mroot@kali[00m:[01;34m~/Documents/COMP362/Lab7/task1[00m# gcc -g graph.c -o g./g[Kremove edge d a./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o gclear[K[2P./ggcc -g graph.c -o g./g[K[K]0;root@kali: ~/Documents/COMP362/Lab7/task1[01;31mroot@kali[00m:[01;34m~/Documents/COMP362/Lab7/task1[00m# ./ggcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[Kgcc -g graph.c -o g./g[K < input.txt
+Enter a command: Unable to display adjacency matrix. There are no vertices yet
+Enter a command: The following commands are available for use:
+	add vertex <vertex_name>
+	add edge <from_vertex_name> <to_vertex_name>
+	remove edge <from_vertex_name> <to_vertex_name>
+	display 
+	check
+	help
+	quit
+Angled brackets such as: <info> represent user defined information.
+Enter a command: Added a new vertex named Aa at index 0.
+Enter a command: There is already a vertex with the name Aa.
+Enter a command: Added a new vertex named Bbb at index 1.
+Enter a command: 	Aa	Bbb
+	        Aa	0	0
+	       Bbb	0	0
+
+Enter a command: Added a new vertex named Cccc at index 2.
+Enter a command: Added a new vertex named Ddddd at index 3.
+Enter a command: A vertex cannot be connected to itself.
+Enter a command: Added edge from vertex Aa to vertex Xyz.
+Enter a command: Added edge from vertex Aa to vertex Bbb.
+Enter a command: 	Aa	Bbb	Cccc	Ddddd
+	        Aa	0	1	0	0
+	       Bbb	0	0	0	0
+	      Cccc	0	0	0	0
+	     Ddddd	0	0	0	0
+
+Enter a command: >> DEADLOCKED <<
+Enter a command: Added edge from vertex Bbb to vertex Cccc.
+Enter a command: Added edge from vertex Cccc to vertex Ddddd.
+Enter a command: 	Aa	Bbb	Cccc	Ddddd
+	        Aa	0	1	0	0
+	       Bbb	0	0	1	0
+	      Cccc	0	0	0	1
+	     Ddddd	0	0	0	0
+
+Enter a command: >> NO DEADLOCK <<
+Enter a command: Added edge from vertex Ddddd to vertex Aa.
+Enter a command: 	Aa	Bbb	Cccc	Ddddd
+	        Aa	0	1	0	0
+	       Bbb	0	0	1	0
+	      Cccc	0	0	0	1
+	     Ddddd	1	0	0	0
+
+Enter a command: >> NO DEADLOCK <<
+Enter a command: Removed the edge from vertex Ddddd to vertex Aa.
+Enter a command: 	Aa	Bbb	Cccc	Ddddd
+	        Aa	0	1	0	0
+	       Bbb	0	0	1	0
+	      Cccc	0	0	0	1
+	     Ddddd	0	0	0	0
+
+Enter a command: >> NO DEADLOCK <<
+Enter a command: Exiting the program.
+]0;root@kali: ~/Documents/COMP362/Lab7/task1[01;31mroot@kali[00m:[01;34m~/Documents/COMP362/Lab7/task1[00m# exit
+exit
+
+Script done on 2018-03-09 16:50:19-0800

@@ -1,20 +1,24 @@
-add vertex a
-add vertex b
-add vertex a
-add vertex c
-add edge a b
-add edge b c
-add edge c a
+display
+help
+add vertex Aa
+add vertex Aa
+add vertex Bbb
+display
+add vertex Cccc
+add vertex Ddddd
+add edge Aa Aa
+add edge Aa Xyz
+add edge Aa Bbb
 display
 check
-remove edge c a
-check 
-display
-add vertex d
-add edge c d
+add edge Bbb Cccc
+add edge Cccc Ddddd
 display
 check
-add edge c a
+add edge Ddddd Aa
+display 
+check
+remove edge Ddddd Aa
 display
 check
 quit

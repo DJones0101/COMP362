@@ -18,6 +18,7 @@ bool adjacency_matrix[MAX_NUMBER_OF_VERTICES][MAX_NUMBER_OF_VERTICES];
 int number_of_vertices = 0;
 char commands_in[STRING_MAX_SIZE];
 char command1[STRING_MAX_SIZE], command2[STRING_MAX_SIZE], command3[STRING_MAX_SIZE];
+bool visited[MAX_NUMBER_OF_VERTICES];
 
 
 
@@ -26,7 +27,7 @@ void add_vertex(char *vertex_name);
 void add_edge(char *from_vertex_name, char *to_vertex_name);
 void remove_edge(char *from_vertex_name, char *to_vertex_name);
 int get_command_indexes(char *commands);
-bool DFS(bool adjacency_matrix[][MAX_NUMBER_OF_VERTICES], bool visited[number_of_vertices], int index);
+bool DFS(bool adjacency_matrix[][MAX_NUMBER_OF_VERTICES],bool visited[], int index);
 void display_adjacency_matrix();
 bool check_for_cycle();
 void display_help();
@@ -44,6 +45,7 @@ int main(int argc, char *argv[]) {
 	}
 	int index;
 
+
 	while (true) {
 
 		printf("Enter a command: ");
@@ -55,8 +57,9 @@ int main(int argc, char *argv[]) {
 		case ADD_EDGE: fscanf(stdin, "%s %s", command1, command2); add_edge(command1, command2); break;
 		case REMOVE_EDGE: fscanf(stdin, "%s %s", command1, command2); remove_edge(command1, command2); break;
 		case DISPLAY: display_adjacency_matrix(); break;
-		case CHECK: 
+		case CHECK: 	
 		if(check_for_cycle() == false){printf(">> DEADLOCKED <<\n");}else{printf(">> NO DEADLOCK <<\n");};break;
+		//memset(visited, false, number_of_vertices * sizeof(bool));
 		case HELP: display_help(); break;
 		case QUIT: printf("Exiting the program.\n"); exit(EXIT_SUCCESS);
 		default: printf("Invalid Command\n"); break;
@@ -166,41 +169,30 @@ void display_adjacency_matrix() {
 
 	} else {
 
-		int count;
-		printf("\t\t");
+		int nameIndex;
 
-		for (count = 0; count < number_of_vertices; count++) {
+		for(nameIndex = 0; nameIndex < number_of_vertices; nameIndex++){
+			printf("\t%s",vertex_names[nameIndex]);
+		}
+		printf("\n");
 
-			printf("  %10s", vertex_names[count]);
-		} printf("\n");
+		int row, col;
 
-		int row;
-		int col;
-		count = 0;
-		for (row = 0; row < number_of_vertices; row++) {
-
-			printf("\t%10s", vertex_names[count]);
-
-			for (col = 0; col < number_of_vertices; col++) {
-
-
-				if (adjacency_matrix[row][col] == true) {
-					printf("%10d", 1);
-				} else {
-					printf("%10d", 0);
-				}
-
+		for(row = 0; row < number_of_vertices; row++){
+			printf("%s",vertex_names[row] );
+			for(col = 0; col < number_of_vertices; col++){
+				printf("\t%d",adjacency_matrix[row][col] );
 			}
-			count++;
 			printf("\n");
 		}
+		printf("\n");
 
 	}
 }
 
 bool check_for_cycle() {
 
-	bool visited[number_of_vertices];
+	//bool visited[number_of_vertices];
 	return DFS(adjacency_matrix,visited,0);
 }
 
@@ -263,21 +255,27 @@ void free_names() {
 
 }
 
-bool DFS(bool adjacency_matrix[][MAX_NUMBER_OF_VERTICES], bool visited[number_of_vertices], int index) {
+bool DFS(bool graph[][MAX_NUMBER_OF_VERTICES], bool visited[], int i) {
+	bool return_val = false;
 
-	if(visited[index] == true){
-		return false;
+	if (visited[i] == false) {
+
+		visited[i] = true; // Mark node as "visited"
+		//System.out.print(i + 1 + " ");
+
+		for (int j = 0; j < number_of_vertices; j++) {
+
+			if (graph[i][j] == true && visited[j] == false) {
+
+				DFS(graph, visited,j); // Visit node
+
+			}
+		}
+
+	}else if( visited[i] == true){
+
+		return_val = true;
 	}
 
-	int row;
-	visited[index] = true;
-
-	for (row = 0; row < number_of_vertices; row++) {
-		if (visited[row] == false && adjacency_matrix[index][row] == true) {
-			DFS(adjacency_matrix, visited, row);
-		} 
-	}
-
-	return true;
+	return return_val;
 }
-
