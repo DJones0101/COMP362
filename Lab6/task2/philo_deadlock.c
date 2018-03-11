@@ -1,7 +1,7 @@
 /*
 * Darius Jones
 * Lab 6 Task 2
-* 2/27/2018
+* 3/2/2018
 */
 
 #include <pthread.h>
@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
 	numOfSeats = atoi(argv[1]);
 	numOfTurns = atoi(argv[2]);
 	chopstick = calloc(numOfSeats, sizeof(pthread_mutex_t));
-// set the see for random number generator
+// set the seed for random number generator
 	srand(time(NULL));
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
@@ -54,48 +54,35 @@ int main (int argc, char *argv[])
 }
 
 void *philosopher (void *num) {
+
 	int id = (long)num;
 	printf ("Philsopher no. %d sits at the table.\n", id);
-// philosophers arrive at the table at various times
-// pthread_mutex_trylock(&(chopstick[id]), pthread_mutex_unlock (&(chopstick[id])); figure out how these work
-// lock means grab, unlock means putdown
+	usleep (DELAY);
+	int turn_number;
 
+	/*pthread_mutex_trylock() returns zero after completing successfully.
+	  Any other return value indicates that an error occurred.*/
 
-	int i;
-	for (i = 0; i < numOfTurns; i++) {
+	for (turn_number = 0; turn_number < numOfTurns; turn_number++) {
 
-		printf ("Philsopher no. %d gets hungry for the %d time!\n", id, i + 1);
+		// If both chopsticks are unavailable spin, otherwise continue.
+		while (pthread_mutex_trylock (&(chopstick[id])) != 0
+		        && pthread_mutex_trylock (&(chopstick[(id + 1) % numOfSeats])) != 0) {;}
+
+		printf ("Philsopher no. %d gets hungry for the %d time!\n", id, turn_number + 1);
 		printf ("Philsopher no. %d tries to grab chopstick %d\n", id, id);
-
-		if (pthread_mutex_trylock(&(chopstick[id])) == 1) { // try grab
-
-			printf ("Philsopher no. %d has grabbed chopstick %d\n", id, id);
-			printf ("Philsopher no. %d tries to grab chopstic %d\n", id, (id + 1) % numOfSeats);
-
-			if (pthread_mutex_trylock (&(chopstick[(id + 1) % numOfSeats])) == 1) { // try grab
-
-				printf ("Philsopher no. %d grabbed chopstick %d\n", id, (id + 1) % numOfSeats);
-				printf ("Philsopher no. %d eating\n", id);
-				printf ("Philsopher no. %d stopped eating\n", id);
-				printf ("Philsopher no. %d has returned chopstick %d\n", id, id);
-				printf ("Philsopher no. %d has returned chopstick %d\n", id, (id + 1) % numOfSeats);
-				pthread_mutex_unlock (&(chopstick[id]));
-				pthread_mutex_unlock (&(chopstick[(id + 1) % numOfSeats]));
-				printf ("Philsopher no. %d finished turn %d\n", id, i + 1);
-
-			} else {
-
-				printf ("Philsopher no. %d has returned chopstick %d\n", id, (id + 1) % numOfSeats);
-				usleep(DELAY * 2);
-			}
-
-		} else {
-
-			printf ("Philsopher no. %d failed to get  chopstick %d\n", id, id);
-			usleep(DELAY * 2);
-		}
-
+		printf ("Philsopher no. %d has grabbed chopstick %d\n", id, id);
+		printf ("Philsopher no. %d tries to grab chopstic %d\n", id, (id + 1) % numOfSeats);
+		printf ("Philsopher no. %d grabbed chopstick %d\n", id, (id + 1) % numOfSeats);
+		printf ("Philsopher no. %d eating\n", id);
+		printf ("Philsopher no. %d stopped eating\n", id);
+		pthread_mutex_unlock (&(chopstick[id]));
+		printf ("Philsopher no. %d has returned chopstick %d\n", id, id);
+		pthread_mutex_unlock (&(chopstick[(id + 1) % numOfSeats]));
+		printf ("Philsopher no. %d has returned chopstick %d\n", id, (id + 1) % numOfSeats);
+		printf ("Philsopher no. %d finished turn %d\n", id, turn_number + 1);
 	}
+
 	printf (">>>>>> Philsopher no. %d finished meal. <<<<<<\n", id);
 	pthread_exit(NULL);
 }
