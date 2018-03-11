@@ -21,4 +21,7 @@ check
 remove edge Ddddd Aa
 display
 check
+add edge Ddddd Cccc
+display
+check
 quit
