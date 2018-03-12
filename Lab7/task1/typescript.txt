@@ -4,7 +4,7 @@
 * 3/8/2018
 */
 
-I piped in the input and because it was a lot of typing. When I enter the commands in terminal 
+I piped in the input because it was a lot of typing. When I enter the commands in terminal 
 for display it prints out the way it should, but for some reason it won't align here.
 
 
