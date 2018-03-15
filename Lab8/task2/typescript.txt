@@ -1,0 +1,32 @@
+/*
+* Darius Jones
+* Lab 8 Task 2	
+* 3/15/2018
+*/
+
+Provide commentary.
+
+
+dariusjones@student-virtual:~/Desktop/task2$ gcc -fPIC -shared -nostartfiles -o libgiveMeNum.so giveMeNum.c
+dariusjones@student-virtual:~/Desktop/task2$ gcc -rdynamic -o testDyLibMain testDyLibMain.c -ldl
+dariusjones@student-virtual:~/Desktop/task2$ nm libgiveMeNum.so
+0000000000201030 D __bss_start
+0000000000200ed0 d _DYNAMIC
+0000000000201030 D _edata
+0000000000201030 D _end
+0000000000000440 T giveMeNum
+0000000000201000 d _GLOBAL_OFFSET_TABLE_
+00000000000004ac r __GNU_EH_FRAME_HDR
+                 U __isoc99_scanf@@GLIBC_2.7
+                 U puts@@GLIBC_2.2.5
+                 U __stack_chk_fail@@GLIBC_2.4
+dariusjones@student-virtual:~/Desktop/task2$ gcc *.c -o t
+/tmp/ccmmmrPj.o: In function `main':
+testDyLibMain.c:(.text+0x1c): undefined reference to `dlopen'
+testDyLibMain.c:(.text+0x2c): undefined reference to `dlerror'
+testDyLibMain.c:(.text+0x59): undefined reference to `dlerror'
+testDyLibMain.c:(.text+0x6c): undefined reference to `dlsym'
+testDyLibMain.c:(.text+0x83): undefined reference to `dlerror'
+testDyLibMain.c:(.text+0xd9): undefined reference to `dlclose'
+collect2: error: ld returned 1 exit status
+dariusjones@student-virtual:~/Desktop/task2$
