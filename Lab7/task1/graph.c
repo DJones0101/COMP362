@@ -17,7 +17,7 @@ char *vertex_names[MAX_NUMBER_OF_VERTICES];
 bool adjacency_matrix[MAX_NUMBER_OF_VERTICES][MAX_NUMBER_OF_VERTICES];
 int number_of_vertices = 0;
 char commands_in[STRING_MAX_SIZE];
-char command1[STRING_MAX_SIZE], command2[STRING_MAX_SIZE], command3[STRING_MAX_SIZE];
+char command1[STRING_MAX_SIZE], command2[STRING_MAX_SIZE];
 int cycle_flag = false;
 
 int get_index_of_vertex(char *vertex_name);
@@ -226,13 +226,21 @@ int get_command_indexes(char *commands) {
 			return ADD_VERTEX;
 		} else if (strcmp(commands, "edge") == 0) {
 			return ADD_EDGE;
+		}else{
+
+			return INPUT_ERROR;
 		}
+
 
 	} else if ( strcmp(commands, "remove") == 0) {
 
 		fscanf(stdin, "%s", commands);
+
 		if (strcmp(commands, "edge") == 0) {
 			return REMOVE_EDGE;
+		}else{
+
+			return INPUT_ERROR;
 		}
 
 	} else if ( strcmp(commands, "check") == 0) {
