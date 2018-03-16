@@ -17,7 +17,7 @@
 * table (that can be a 2-dimensional array, or a one-dimensional array of structs)
 */
 
-void initInverted(struct Page_Table **inverted_table, int memory_size, int frame_size){
+void initInverted(struct Page_Table **inverted_table, int memory_size, int number_of_pages){
 
 	
 
@@ -32,13 +32,11 @@ void initInverted(struct Page_Table **inverted_table, int memory_size, int frame
 */
 int translate(struct Page_Table *inverted_table, int pid, int page, int offset){
 
+
+
+
 	/*
-
-	
-
 	return (frame_size * page_size) + offset;
-
-
 	*/
 
 }

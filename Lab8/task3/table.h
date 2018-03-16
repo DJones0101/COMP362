@@ -9,12 +9,16 @@
 
 #define MAX_SIZE 10
 
-struct Translate_Table{};
+struct Table_Item{
+	int pid;
+	int page_number;
+	int time_stamp;
+};
 
 struct Page_Table{
 	int page_size;
 	int  number_of_pages;
-	struct Translate_Table translate[MAX_SIZE]; 
+	srtuct Table_Item item[MAX_SIZE];
 };
 
 
