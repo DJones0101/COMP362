@@ -10,8 +10,6 @@
 #include "inverted.h"
 
 
-
-
 /*
 * allocates and initializes the table for the given sizes of the memory and frame
 * to ensure that the library is thread-safe, the table should be a struct that
@@ -21,18 +19,15 @@
 
 void initInverted(struct inverted_ptable **inverted_table, int memory_size, int frame_size) {
 
-	struct inverted_ptable **inverted = malloc(sizeof(struct inverted_ptable*));
-	**inverted = **inverted_table;
-	(*inverted)->page_size = (memory_size / frame_size);
-	(*inverted)->number_of_pages = frame_size;
+	*inverted_table = malloc(sizeof(struct inverted_ptable*));
+	(*inverted_table)->page_size = (memory_size / frame_size);
+	(*inverted_table)->number_of_pages = frame_size;
 
 	int count;
 	for (count = 0; count < frame_size; count++) {
 
-		(*inverted)->table[count] = malloc(sizeof(struct entry*));
+		(*inverted_table)->table[count] = malloc(sizeof(struct entry*));
 	}
-
-
 
 }
 
@@ -48,23 +43,24 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 
 	// the frame is the struct within the table struct
 
-	int physical_address = (pid * inverted_ptable->page_size) + offset;
+	int frame_index = tableSearch(inverted_table, pid, page);
+	int page_size = inverted_table->page_size;
 
-	if (found) {
+	if (frame_index != ERROR) {
 
-		frame_index = where it was found;
+		inverted_table->table[frame_index]->pid = pid;
+		inverted_table->table[frame_index]->page = page;
+		return (frame_index * page_size) + offset;
 
-	} else if (not found) {
+	} else if (frame_index == ERROR) {
 
-		tableSearch for empty frame;
-
-	if ( empyt frame found) { frame_index = where it was found}
-
-	} else if ( no empty space) {
-		find oldest entry in the frame and insert neew one there.
+		frame_index = findOldIndex(inverted_table, pid, page);
+		inverted_table->table[frame_index]->pid = pid;
+		inverted_table->table[frame_index]->page = page;
+		return (frame_index * page_size) + offset;
 	}
 
-	return physical_address;
+	return ERROR;
 
 }
 
@@ -74,36 +70,55 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 */
 void releaseInverted(struct inverted_ptable **inverted_table) {
 
+	int index;
+	int number_of_pages = (*inverted_table)->number_of_pages;
+
+	for (index = 0; index < number_of_pages; index++) {
+
+		free((*inverted_table)->table[index]);
+	}
+
+	free(inverted_table);
 }
 
 
 int tableSearch(struct inverted_ptable *inverted_table, int pid, int page) {
 
 	int index;
-	bool is_found;
+	for (index = 0; index < inverted_table->number_of_pages; index++) {
 
-	for (index = 0; index < inverted_ptable->number_of_pages; index++) {
+		if (inverted_table->table[index]->pid == pid && inverted_table->table[index]->page == page ) {
 
-		if (inverted_ptable->table[index]->pid == pid && inverted_ptable->table[index]->page == page ) {
-
-			is_found = true;
-			break;
-
-		} else {
-
-			is_found = false;
-			break;
+			return index;
 		}
 	}
-
-	return index;
-
+	return ERROR;
 }
 
 int findOldIndex(struct inverted_ptable *inverted_table, int pid, int page) {
 
+	int index;
+	int max_index;
+	
+	// return the indx of the one with the largest time
+
+	for (index = 0; index < inverted_table->number_of_pages; index++) {
+
+		
+	}
+
+	return max_index;
 }
 
-void display(struct inverted_ptable *inverted_ptable) {
+void display(struct inverted_ptable *inverted_table) {
+
+	int index;
+	int number_of_pages = inverted_table->number_of_pages;
+
+	for (index = 0; index < number_of_pages; index++) {
+
+		printf("\t%-12d%-12d\n", inverted_table->table[index]->pid, inverted_table->table[index]->page);
+
+	}
 
 }

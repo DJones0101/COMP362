@@ -6,21 +6,23 @@
 
 #ifndef table_h
 #define table_h
+#include <time.h>
+#define ERROR -1
 
 
 struct entry{
 	int pid;
 	int page;
-	int time_stamp;
-} ENTRY;
+	struct tm time_stamp;
+};
 
 struct inverted_ptable {
 	
 	int page_size;
 	int number_of_pages;
-	struct ENTRY *table[];
+	struct entry *table[];
 
-} INVERTED_PTABLE;
+};
 
 
 void initInverted(struct inverted_ptable **inverted_table, int memory_size, int frame_size);
@@ -28,7 +30,7 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 void releaseInverted(struct inverted_ptable **inverted_table);
 int tableSearch(struct inverted_ptable *inverted_table, int pid, int page);
 int findOldIndex(struct inverted_ptable *inverted_table, int pid, int page);
-void display(struct inverted_ptable *inverted_ptable) ;
+void display(struct inverted_ptable *inverted_table) ;
 
 
 
