@@ -9,7 +9,7 @@
 #include <time.h>
 #define ERROR -1
 #define MEMORY_SIZE 20
-#define PAGE_SIZE 4
+#define PAGE_SIZE 5
 
 
 struct entry{

@@ -27,7 +27,7 @@ void initInverted(struct inverted_ptable **inverted_table, int memory_size, int 
 
 	int count;
 	for (count = 0; count < frame_size; count++) {
-		
+
 		(*inverted_table)->table[count] = (struct entry*)malloc(sizeof(struct entry));
 
 	}
@@ -50,9 +50,8 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 	if (frame_index != ERROR) {// request found, frame_index equal to where it was found
 
 		inverted_table->table[frame_index]->pid = pid;
+
 		inverted_table->table[frame_index]->page = page;
-		inverted_table->table[frame_index]->time_stamp = time(NULL);
-		
 
 	} else if (frame_index == ERROR) {// request not found, search table for oldest time
 
@@ -63,7 +62,7 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 			frame_index = empty_frame_found;
 			inverted_table->table[frame_index]->pid = pid;
 			inverted_table->table[frame_index]->page = page;
-			inverted_table->table[frame_index]->time_stamp = time(NULL);
+		
 			
 
 		} else { // not empty frame found so find the oldest one
@@ -71,7 +70,7 @@ int translate(struct inverted_ptable *inverted_table, int pid, int page, int off
 			frame_index = findOldIndex(inverted_table, pid, page);
 			inverted_table->table[frame_index]->pid = pid;
 			inverted_table->table[frame_index]->page = page;
-			inverted_table->table[frame_index]->time_stamp = time(NULL);
+			
 			
 		}
 
@@ -105,7 +104,7 @@ int tableSearch(struct inverted_ptable *inverted_table, int pid, int page) {
 	for (index = 0; index < inverted_table->number_of_pages; index++) {
 
 		if (inverted_table->table[index]->pid == pid && inverted_table->table[index]->page == page ) {
-
+			inverted_table->table[index]->time_stamp = time(NULL);
 			return index;
 		}
 	}
@@ -127,6 +126,7 @@ int findOldIndex(struct inverted_ptable *inverted_table, int pid, int page) {
 
 		if (difftime(current_time_stamp, current_max_time) > 0) {
 			max_index = index;
+			inverted_table->table[max_index]->time_stamp = time(NULL);
 			current_max_time = current_time_stamp;
 		}
 
@@ -142,7 +142,7 @@ int findEmpty(struct inverted_ptable *inverted_table, int pid, int page) {
 
 	for (index = 0; index < number_of_pages; index++) {
 
-		if (inverted_table->table[index]->pid == 0) {
+		if (inverted_table->table[index]->pid == 0 ) {
 
 			return index;
 		}
@@ -158,8 +158,8 @@ void display(struct inverted_ptable *inverted_table) {
 
 	int index;
 	int number_of_pages = inverted_table->number_of_pages;
-	char page[] = "Page\0";
-	char pid[] = "Pid\0";
+	char page[] = "Page";
+	char pid[] = "Pid";
 	printf("\n");
 	printf("\t%-12s%-12s\n", pid, page);
 

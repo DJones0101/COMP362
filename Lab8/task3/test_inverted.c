@@ -9,15 +9,12 @@
 #include <stdbool.h>
 #include "inverted.h"
 
-#define MEMORY_SIZE 20
-#define PAGE_SIZE 4
+
 
 int main(int argc, char *argv[]) {
 
 	struct inverted_ptable *table;
 	initInverted(&table, MEMORY_SIZE, PAGE_SIZE);
-	printf("Page size: %d\n", table->page_size);
-	printf("Number of Pages: %d\n", table->number_of_pages);
 
 
 	srand(time(NULL));
@@ -31,18 +28,22 @@ int main(int argc, char *argv[]) {
 	(i.e., <pid, page, offset>) and uses the library to translate them into physical equivalents.*/
 
 
-	//while (true) {
+	while (true) {
+
+		 random_pid = rand() % 1000;
+		 random_offset = rand() % 10;
+		 random_page = rand() % 20;
 
 
-	//	if (count == PAGE_SIZE) {break;}
-		
-	//	printf("Logical Address is (%d,%d,%d)\n", random_pid, random_page, random_offset);
-	//	physical_address = translate(table, random_pid, random_page, random_offset);
+		//if (count == 10) {break;}
+
+		printf("Logical Address is (%d,%d,%d)\n", random_pid, random_page, random_offset);
+		physical_address = translate(table, random_pid, random_page, random_offset);
 		display(table);
-	//	printf("Physical Address is %d\n", physical_address);
-	//	count++;
+		printf("Physical Address is %d\n", physical_address);
+		count++;
 
-	//}
+	}
 
 
 
