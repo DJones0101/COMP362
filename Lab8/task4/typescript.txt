@@ -1,0 +1,51 @@
+/*
+* Darius Jones
+* Lab 8 Task 3
+* 3/21/2018
+*/
+
+kali@kali:~/Desktop/COMP362/Lab8/task4$ gcc -g -fPIC *.c -shared -o liball.so
+kali@kali:~/Desktop/COMP362/Lab8/task4$ gcc -g -wall -o prog *.c liball.so
+gcc: error: unrecognized command line option ‘-wall’; did you mean ‘-Wall’?
+kali@kali:~/Desktop/COMP362/Lab8/task4$ gcc -g -o prog *.c liball.so
+kali@kali:~/Desktop/COMP362/Lab8/task4$ ./prog
+-----Empty table created-----
+
+	Pid         Page        
+	0           0           
+	0           0           
+	0           0           
+	0           0           
+	0           0           
+
+------------------------------
+Press 1 to generate a address or 2 to quit
+1
+Logical Address generated (pid: 2,page: 0,offset: 0)
+Translated to Physical Address 0
+
+	Pid         Page        
+	2           0           
+	0           0           
+	0           0           
+	0           0           
+	0           0           
+
+------------------------------
+Press 1 to generate a address or 2 to quit
+1
+Logical Address generated (pid: 3,page: 0,offset: 1)
+Translated to Physical Address 5
+
+	Pid         Page        
+	2           0           
+	3           0           
+	0           0           
+	0           0           
+	0           0           
+
+------------------------------
+Press 1 to generate a address or 2 to quit
+2
+Quitting program
+kali@kali:~/Desktop/COMP362/Lab8/task4$ 
