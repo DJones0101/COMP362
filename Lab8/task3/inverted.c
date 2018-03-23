@@ -125,7 +125,7 @@ int findOldIndex(struct inverted_ptable *inverted_table, int pid, int page) {
 
 		if ( compare_times > 0) {
 			max_index = index;
-			max_time = max_time = inverted_table->table[max_index]->time_stamp;
+			max_time = inverted_table->table[max_index]->time_stamp;
 		}
 
 	}
