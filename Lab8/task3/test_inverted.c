@@ -21,7 +21,6 @@ int main(int argc, char *argv[]) {
 	int random_pid;
 	int random_offset;
 	int random_page;
-	int count = 0;
 	int physical_address;
 	int option;
 
