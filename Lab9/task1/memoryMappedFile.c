@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
     printf("Enter file offset between 0 and %d: ", (int) sbuf.st_size - 1);
     scanf("%d", &offset);
 
-    if (offset < 0 || offset > sbuf.st_size - 1)
-    {
+    if (offset < 0 || offset > sbuf.st_size - 1){
         fprintf(stderr, "mmapdemo: offset must be in the range 0-%d\n",
                 (int) sbuf.st_size - 1);
         exit(1);
@@ -54,8 +53,9 @@ int main(int argc, char *argv[])
     // the last "0" means that we share the file starting at offset 0
     data = mmap(NULL, sbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
-    if (data == MAP_FAILED)
+    if (data == MAP_FAILED){
         oops("mmap failed!", 1);
+    }
 
     printf("Byte at offset %d is '%c'\n", offset, data[offset]);
 
