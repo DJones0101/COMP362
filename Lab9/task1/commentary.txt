@@ -1,0 +1,23 @@
+/*
+* Darius Jones
+* Lab 9 Task 2
+* 3/29/2018
+*/
+
+
+1. What is the page size that your operating system is using?
+	
+	My operating system is using pages of size 4096.
+
+2. What is the valid scope for the first offset reference to the content of the file?
+   
+   The valid scope for the first offset reference must be a multiple of the page size.
+
+
+3. Why does the program crash for some values of offset?
+
+	The operating system can only detect that an entire page is being read not individual locations. The offsets must be algined with the pagesize boundary.
+
+4. For what values of the offset, the program does not crash?
+
+	The program will not crash for offset values that are between 4096 and 20060.

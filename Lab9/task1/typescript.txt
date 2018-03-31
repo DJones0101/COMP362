@@ -1,0 +1,25 @@
+/*
+* Darius Jones
+* Lab 9 Task 2
+* 3/29/2018
+*/
+
+darius@dj:~/Desktop/COMP362/Lab9/task1$ gcc -g *.c -o m
+darius@dj:~/Desktop/COMP362/Lab9/task1$ ./m
+Playing with pages of size 4096
+Enter file name: Lorem.txt
+Enter file offset between 0 and 20060: 4096
+Byte at offset 4096 is '*'
+Byte at offset 4096 is '*'
+--------------------------------------------------
+Enter a char: 
++
+Byte at offset 4096 was replace with '+'
+darius@dj:~/Desktop/COMP362/Lab9/task1$ gcc -g *.c -o m
+darius@dj:~/Desktop/COMP362/Lab9/task1$ ./m
+Playing with pages of size 4096
+Enter file name: Lorem.txt
+Enter file offset between 0 and 20060: 0
+Byte at offset 0 is 'L'
+Segmentation fault (core dumped)
+darius@dj:~/Desktop/COMP362/Lab9/task1$ 

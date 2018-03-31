@@ -1,9 +1,8 @@
 /*
- *  memoryMapFile.c
-
- *  lect10code
- *
- */
+* Darius Jones
+* Lab 9 Task 2
+* 3/29/2018
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,18 +29,18 @@ int main(int argc, char *argv[])
     scanf("%s", line);
     fileName = line;
 
-    if ((fd = open(fileName, O_RDONLY)) == -1){
+    if ((fd = open(fileName, O_RDONLY)) == -1) {
         oops("Failed to open file!", 1);
     }
 
-    if (stat(fileName, &sbuf) == -1){
+    if (stat(fileName, &sbuf) == -1) {
         oops("Failed to stat file!", 1);
     }
 
     printf("Enter file offset between 0 and %d: ", (int) sbuf.st_size - 1);
     scanf("%d", &offset);
 
-    if (offset < 0 || offset > sbuf.st_size - 1){
+    if (offset < 0 || offset > sbuf.st_size - 1) {
         fprintf(stderr, "mmapdemo: offset must be in the range 0-%d\n",
                 (int) sbuf.st_size - 1);
         exit(1);
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
     // the last "0" means that we share the file starting at offset 0
     data = mmap(NULL, sbuf.st_size, PROT_READ, MAP_SHARED, fd, 0);
 
-    if (data == MAP_FAILED){
+    if (data == MAP_FAILED) {
         oops("mmap failed!", 1);
     }
 
@@ -61,11 +60,35 @@ int main(int argc, char *argv[])
 
     // unmap part of the file; NOTE: OS works with pages, so if the length
     // is less then the page length, then it will be raised automatically
-    if (munmap(data, pagesize) < 0){
+    if (munmap(data, pagesize) < 0) {
         oops("Failed to unmap file!", 1);
     }
 
     printf("Byte at offset %d is '%c'\n", offset, data[offset]);
 
+
+    printf("--------------------------------------------------\n");
+
+    char input_char;
+
+    printf("Enter a char: \n");
+    fscanf(stdin," %c", &input_char);
+
+    if ((fd = open(fileName, O_RDWR)) == -1) {
+        oops("Failed to open file!", 1);
+    }
+
+    data = mmap(NULL, sbuf.st_size, PROT_WRITE, MAP_SHARED, fd, 0);
+
+    if (data == MAP_FAILED) {oops("mmap failed!", 1);}
+
+    data[offset] = input_char;
+
+    printf("Byte at offset %d was replace with '%c'\n", offset, data[offset]);
+
+
+    if (munmap(data, pagesize) < 0) {oops("Failed to unmap file!", 1);}
+
+    
     return 0;
 }
