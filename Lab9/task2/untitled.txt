@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-enum {FAULT_SPACE = 0, FAULT_NO_SPACE};
 
 typedef struct node NODE;
 struct node {
@@ -22,22 +21,23 @@ NODE *HEAD;
 
 int maximum_capacity;
 int current_capacity;
-int fault_count = 0;
+int fault_count;
 
-void remove_tail_node();
+
+void remove_tail_node(NODE *HEAD);
 void append_to_head(int new_data);
-void swap_data(int data1, int data2);
-void swap_it_up( int current_input);
+void swap_head(NODE *to_swap);
 NODE* create_new_node(int new_data);
 void print();
-void free_nodes();
-void insert_last(int new_data);
+void free_nodes(NODE *HEAD);
 void simulation();
 NODE *search_list(int data);
 
 
 int main(int argc, char *argv[]) {
+
 	simulation();
+	free_nodes(HEAD);
 	return 0;
 }
 
@@ -53,45 +53,52 @@ void simulation() {
 
 		if (fscanf(stdin, "%d", &current_input) == EOF) {break;}
 
+		printf("---------------REQUEST = %d----------------------\n", current_input);
+
+
 		search_result = search_list(current_input);
 
+		if (search_result != NULL) { // found, HIT case
 
-		//printf("------------REQU = %d--------------------\n", current_input);
 
-		if (search_result == NULL ) {
-			if ( current_capacity < maximum_capacity) {
+			printf(">");
+
+			if (HEAD->data != current_input) {
+				swap_head(search_result);
+			}
+
+
+		} else if (search_result == NULL) { // not found, fault
+
+			printf("*");
+
+			if ( current_capacity < maximum_capacity) { // space avaliable
 
 				append_to_head(current_input);
-			} else {
 
-				remove_tail_node();
+			} else { // no space avaliable
+
+				remove_tail_node(HEAD);
 				append_to_head(current_input);
 
 			}
-
+			(if current_capacity < maximum_capacity){
+				current_capacity++;
+			}
+			
 			fault_count++;
-			printf("*");
-
-
-
-		} else  {
-			swap_it_up(current_input);
-			printf(">");
 
 		}
 
+
+		printf("---------------HEAD = %d----------------------\n", HEAD->data);
+
 		print();
-
-		//printf("------------HEAD = %d--------------------\n", HEAD->data);
-
-
-
 
 	}
 
-	printf("Page faut count: %d\n", fault_count);
 
-
+	printf("Number of faults:  %d\n", fault_count);
 }
 
 
@@ -99,19 +106,14 @@ void simulation() {
 NODE *search_list(int data) {
 	NODE *current = HEAD;
 
-
 	while (current != NULL) {
 
-
-
 		if (current->data == data) {
-
 			return current;
 		}
 
 		current = current->next;
 	}
-
 
 	return NULL;
 }
@@ -125,25 +127,9 @@ NODE* create_new_node(int new_data) {
 	return new_node;
 }
 
-void insert_last(int new_data) {
-
-	NODE *to_insert = create_new_node(new_data);
-	NODE *current = HEAD;
-
-	while (current != NULL) {
-		current = current->next;
-	}
-
-	current->next = to_insert;
-	to_insert->prev = current;
-	to_insert->next = NULL;
-
-}
-
-
 void append_to_head(int new_data) {
 	NODE *new_node = create_new_node(new_data);
-	current_capacity++;
+	
 
 	if (HEAD == NULL) {
 		HEAD = new_node;
@@ -156,47 +142,32 @@ void append_to_head(int new_data) {
 
 }
 
-void remove_tail_node() {
+void remove_tail_node(NODE *HEAD) {
 
 	NODE *current = HEAD;
-	current_capacity--;
+	NODE *temp;
+	
 
 	while (current->next != NULL) {
 		current = current->next;
 	}
 
-	current->prev->next = NULL;
-	free(current);
-
+	temp = current->prev;
+	temp->prev = NULL;
+	//free(current)
+	
 }
 
-void swap_it_up(int current_input) {
+void swap_head(NODE *to_swap) {
 
 
 
-	NODE *current = HEAD;
-	while (current != NULL) {
 
-		if (current->data == current_input) {break;}
-		current = current->next;
-	}
 
-	while ( current->prev != NULL) {
-
-		swap_data(current->data, current->prev->data);
-		current = current->prev;
-
-	}
-
-}
-
-void swap_data(int data1, int data2) {
-	int temp_data = data1;
-	data1 = data2;
-	data2 = temp_data;
 }
 
 void print() {
+
 	NODE *current = HEAD;
 
 	while (current != NULL) {
@@ -204,9 +175,10 @@ void print() {
 		current = current->next;
 	}
 	printf("\n");
+
 }
 
-void free_nodes() {
+void free_nodes(NODE *HEAD) {
 
 	NODE *current = HEAD;
 
