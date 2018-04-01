@@ -52,22 +52,22 @@ void simulation() {
 	fscanf(stdin, "%d", &maximum_capacity);
 
 	int current_input;
-	bool search_result = false;
+	bool found = false;
 
 
 	while (fscanf(stdin, "%d", &current_input) != EOF) {
 
-		search_result = search_list(current_input);
+		found = search_list(current_input);
 
-		if (search_result == false && current_capacity < maximum_capacity) {
+		if (found == false && current_capacity < maximum_capacity) {
 
 			fault_space(current_input);
 
-		} else if (search_result == false && current_capacity == maximum_capacity ) {
+		} else if (found == false && current_capacity == maximum_capacity ) {
 
 			fault_no_space(current_input);
 
-		} else if (search_result == true) {
+		} else if (found == true) {
 
 			hit(current_input);
 		}
