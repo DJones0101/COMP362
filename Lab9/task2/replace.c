@@ -28,12 +28,11 @@ int fault_count = 0;
 
 void remove_tail_node();
 void append_to_head(int new_data);
-void swap_data(int& data1, int& data2);
+void swap_data(int *data1, int *data2);
 void swap_it_up( int current_input);
 NODE* create_new_node(int new_data);
 void print(int fault_stat);
 void free_nodes();
-void insert_last(int new_data);
 void simulation();
 bool search_list(int data);
 void fault_space(int current_input);
@@ -44,6 +43,7 @@ void print_test();
 
 int main(int argc, char *argv[]) {
 	simulation();
+	free_nodes();
 	return 0;
 }
 
@@ -68,14 +68,13 @@ void simulation() {
 			fault_no_space(current_input);
 
 		} else if (search_result == true) {
+
 			hit(current_input);
 		}
 
 	}
 
-	printf("Page faut count: %d\n", fault_count);
-
-
+	printf("Number of faults: %d\n", fault_count);
 }
 
 
@@ -104,22 +103,6 @@ NODE* create_new_node(int new_data) {
 	new_node->next = NULL;
 	return new_node;
 }
-
-void insert_last(int new_data) {
-
-	NODE *to_insert = create_new_node(new_data);
-	NODE *current = HEAD;
-
-	while (current != NULL) {
-		current = current->next;
-	}
-
-	current->next = to_insert;
-	to_insert->prev = current;
-	to_insert->next = NULL;
-
-}
-
 
 void append_to_head(int new_data) {
 	NODE *new_node = create_new_node(new_data);
@@ -153,29 +136,28 @@ void remove_tail_node() {
 void swap_it_up(int current_input) {
 
 	NODE *current = HEAD;
-	int count = 0;
+	int swap_index = 0;
 	while (current != NULL) {
-
 		if (current->data == current_input) {break;}
-		count++;
+		swap_index++;
 		current = current->next;
 	}
 
-	int count_to;
-	for(count_to = 0; count_to < count; count_to++){
-		printf("SWAPPING %d & %d\n", current->prev->data,current->data);
-		swap_data(current->prev->data,current->data);
-		print_test();
+	int count;
+	for(count = 0; count < swap_index; count++){
+		//printf("SWAPPING %d & %d\n", current->prev->data,current->data);
+		swap_data(&(current->prev->data),&(current->data));
+		//print_test();
 		current = current->prev;
 	}
 
 
 }
 
-void swap_data(int& data1, int& data2) {
-	int temp_data = data1;
-	data1 = data2;
-	data2 = temp_data;
+void swap_data(int *data1, int *data2) {
+	int temp_data = *data1;
+	*data1 = *data2;
+	*data2 = temp_data;
 }
 
 void print(int fault_stat) {

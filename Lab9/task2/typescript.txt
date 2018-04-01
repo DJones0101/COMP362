@@ -1,0 +1,48 @@
+/*
+* Darius Jones
+* Lab 9 Task 2
+* 3/29/2018
+*/
+
+darius@dj:~/Desktop/COMP362/Lab9/task2$ gcc -g -Wall *.c -o r
+darius@dj:~/Desktop/COMP362/Lab9/task2$ ./r < input.txt
+*7 
+*0 7 
+*1 0 7 
+*2 1 0 
+>0 2 1 
+*3 0 2 
+>0 3 2 
+*4 0 3 
+*2 4 0 
+*3 2 4 
+*0 3 2 
+>3 0 2 
+>2 3 0 
+*1 2 3 
+>2 1 3 
+*0 2 1 
+>1 0 2 
+*7 1 0 
+>0 7 1 
+>1 0 7 
+Number of faults: 12
+darius@dj:~/Desktop/COMP362/Lab9/task2$ ./r < input2.txt
+*4 
+*3 4 
+*6 3 4 
+*2 6 3 
+*1 2 6 
+>2 1 6 
+*5 2 1 
+*4 5 2 
+*3 4 5 
+>4 3 5 
+*2 4 3 
+>3 2 4 
+*6 3 2 
+*1 6 3 
+*2 1 6 
+*3 2 1 
+Number of faults: 13
+darius@dj:~/Desktop/COMP362/Lab9/task2$ 
