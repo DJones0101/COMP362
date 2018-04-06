@@ -48,3 +48,10 @@ typedef struct node
 NODE *memory; // allocate 2^16 blocks (in init)
 
 char *bitvector; // allocate space for managing 2^16 blocks (in init) for managing 2^16 blocks (in init)
+
+void file_system_create();
+void file_create();
+void directory_create();
+void file_delete();
+void directory_delete();
+
