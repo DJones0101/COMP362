@@ -11,18 +11,34 @@
 #include <string.h>
 
 #define BLOCK_SIZE 256
-#define TWOTOTHESIXTEENTH 65536
+#define MAX_MEMORY 65536
 #define MAX_NAME_LENGTH 128
 #define DATA_SIZE 254
 #define INDEX_SIZE 127
 #define ERROR -1
 
+/*
+   
+                     Access Rights
+
+Number   Octal Permission Representation                                Ref
+0        No permission                                                  ---
+1        Execute permission                                             --x
+2        Write permission                                               -w-
+3        Execute and write permission: 1 (execute) + 2 (write) = 3      -wx
+4        Read permission                                                r--
+5        Read and execute permission: 4 (read) + 1 (execute) = 5        r-x
+6        Read and write permission: 4 (read) + 2 (write) = 6            rw-
+7        All permissions: 4 (read) + 2 (write) + 1 (execute) = 7        rwx
+
+*/
+
 typedef char data_t;
-typedef unsigned short index_t;
+typedef unsigned short index_t;  
 
-typedef enum {DIR_ND, FILE_ND, INDEX_ND, DATA_ND} NODE_TYPE;
+typedef enum {DIRECTORY_ND=0, FILE_ND, INDEX_ND, DATA_ND} NODE_TYPE;
 
-typedef struct fd_node {
+typedef struct fd_node {c
 
    char name[MAX_NAME_LENGTH];
    time_t creation_time;
@@ -49,18 +65,24 @@ typedef struct node {
 
 // storage blocks
 
-NODE *memory[TWOTOTHESIXTEENTH]; // allocate 2^16 blocks (in init)
+NODE *memory[MAX_MEMORY]; // allocate 2^16 blocks (in init)
 char *bitvector; // allocate space for managing 2^16 blocks (in init) for managing 2^16 blocks (in init)
-
+//
 void file_system_create();
-void file_create();
-void directory_create();
-void file_delete();
-void directory_delete();
+void file_create(NODE *directory_node);
+void directory_create(NODE *directory_node);
+void file_delete(NODE *file_node);
+void directory_delete(NODE *directory_node);
+//
 void create_superblock();
 int find_empty_memory_index();
 void place_in_memory(NODE *node);
 void allocate_blocks();
+int find_empty_indexND_index(NODE *index_node);
+void place_in_indexND(NODE *file_node, NODE *index_node);
+void free_nodes();
+void free_blocks();
+
 // bitvector operations
 void display_bitvector();
 void mark_in_bitvector(char *bitvector);
@@ -72,7 +94,7 @@ void mark_empty_bit(char *bitvector);
 
 int main(int argc, char *argv[]) {
    file_system_create();
-   //display_bitvector();
+   display_bitvector();
    return 0;
 }
 
@@ -83,12 +105,45 @@ void file_system_create() {
    create_superblock();
 }
 
+void directory_create(NODE *directory_node){
+   
+   time_t start = time(NULL);
+  
+
+   NODE *directory = malloc(sizeof(NODE));
+   NODE *index_node = malloc(sizeof(NODE));
+
+   directory->type = INDEX_ND;
+   directory->content.file_desc.creation_time = start;
+   directory->content.file_desc.last_modification = start;
+   directory->content.file_desc.last_access = start;
+   directory->content.file_desc.access_rights = 0777;
+   index_node->type =  INDEX_ND;
+   place_in_memory(directory);
+   place_in_memory(index_node);
+
+
+}
+
+void file_create(NODE *directory_node) {
+
+   NODE *file = malloc(sizeof(NODE));
+   NODE *data = malloc(sizeof(NODE));
+   data->type = DATA_ND;
+   file->type = FILE_ND;
+
+   place_in_memory(file);
+   place_in_memory(data);
+   file->content.file_desc.size = 0;
+
+}
+
 
 void allocate_blocks() {
 
    bitvector = calloc(BLOCK_SIZE, sizeof(char));
    int count;
-   for (count = 0; count < TWOTOTHESIXTEENTH; count++) {
+   for (count = 0; count < MAX_MEMORY; count++) {
       memory[count] = malloc(sizeof(NODE));
    }
 }
@@ -97,7 +152,7 @@ void create_superblock() {
 
    time_t start = time(NULL);
 
-   NODE *SUPERBLOCK = malloc( sizeof(NODE));
+   NODE *SUPERBLOCK = malloc(sizeof(NODE));
    NODE *SB_INDEX_ND = malloc(sizeof(NODE));
 
    SUPERBLOCK->type = DIR_ND;
@@ -106,13 +161,9 @@ void create_superblock() {
    SUPERBLOCK->content.file_desc.last_modification = start;
    SUPERBLOCK->content.file_desc.last_access = start;
    SUPERBLOCK->content.file_desc.access_rights = 0000;
-   SUPERBLOCK->content.file_desc.block_ref = 0;
-   SB_INDEX_ND->content.file_desc.block_ref = 1;
    SB_INDEX_ND->type =  INDEX_ND;
    place_in_memory(SUPERBLOCK);
    place_in_memory(SB_INDEX_ND);
-
-
 
 }
 
@@ -120,11 +171,35 @@ void place_in_memory(NODE *node) {
 
    int index = find_empty_memory_index();
    if (index != ERROR) {
+      node->content.file_desc.block_ref = index;
       memory[index] = node;
       mark_empty_bit(bitvector);
-   }else{
+   } else {
       printf("ERROR: in place_in_memory\n");
    }
+}
+
+void place_in_indexND(NODE *file_node, NODE *index_node) {
+
+   int index = find_empty_indexND_index(INDEX_NODE);
+   if (index != ERROR) {
+      INDEX_NODE->content.index[index] = FILE_ND->content.file_desc.block_ref;
+   } else {
+      printf("ERROR: in place_in_indexND\n");
+   }
+}
+
+int find_empty_indexND_index(NODE *index_node) {
+
+   int index;
+   for (index = 0; index < INDEX_SIZE; index++) {
+      if (INDEX_NODE->content.index[index] != 0) {
+         return index;
+      }
+   }
+
+   return ERROR;
+
 }
 
 int find_empty_memory_index() {
