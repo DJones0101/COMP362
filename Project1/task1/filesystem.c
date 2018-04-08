@@ -38,7 +38,7 @@ typedef unsigned short index_t;
 
 typedef enum {DIRECTORY_ND=0, FILE_ND, INDEX_ND, DATA_ND} NODE_TYPE;
 
-typedef struct fd_node {c
+typedef struct fd_node {
 
    char name[MAX_NAME_LENGTH];
    time_t creation_time;
@@ -127,16 +127,26 @@ void directory_create(NODE *directory_node){
 
 void file_create(NODE *directory_node) {
 
-   NODE *file = malloc(sizeof(NODE));
-   NODE *data = malloc(sizeof(NODE));
-   data->type = DATA_ND;
-   file->type = FILE_ND;
-
-   place_in_memory(file);
-   place_in_memory(data);
-   file->content.file_desc.size = 0;
+   NODE *file_node = malloc(sizeof(NODE));
+   file_node->type = FILE_ND;
+   place_in_memory(file_node);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void allocate_blocks() {
@@ -155,7 +165,7 @@ void create_superblock() {
    NODE *SUPERBLOCK = malloc(sizeof(NODE));
    NODE *SB_INDEX_ND = malloc(sizeof(NODE));
 
-   SUPERBLOCK->type = DIR_ND;
+   SUPERBLOCK->type = DIRECTORY_ND;
    strcpy(SUPERBLOCK->content.file_desc.name, "/");
    SUPERBLOCK->content.file_desc.creation_time = start;
    SUPERBLOCK->content.file_desc.last_modification = start;
@@ -166,6 +176,21 @@ void create_superblock() {
    place_in_memory(SB_INDEX_ND);
 
 }
+
+
+void find_memory_index(char name[]){
+   int index;
+   int found = 0;
+   for(index = 0; index < MAX_MEMORY; index++){
+      if(strcmp(name, memory[index]->content.file_desc.name) == found){
+         return index;
+      }
+   }
+
+   return ERROR;
+}
+
+
 
 void place_in_memory(NODE *node) {
 
@@ -181,9 +206,9 @@ void place_in_memory(NODE *node) {
 
 void place_in_indexND(NODE *file_node, NODE *index_node) {
 
-   int index = find_empty_indexND_index(INDEX_NODE);
+   int index = find_empty_indexND_index(index_node);
    if (index != ERROR) {
-      INDEX_NODE->content.index[index] = FILE_ND->content.file_desc.block_ref;
+      index_node->content.index[index] = file_node->content.file_desc.block_ref;
    } else {
       printf("ERROR: in place_in_indexND\n");
    }
@@ -193,7 +218,7 @@ int find_empty_indexND_index(NODE *index_node) {
 
    int index;
    for (index = 0; index < INDEX_SIZE; index++) {
-      if (INDEX_NODE->content.index[index] != 0) {
+      if (index_node->content.index[index] != 0) {
          return index;
       }
    }
@@ -232,7 +257,11 @@ void mark_empty_bit(char *bitvector) {
          }
       }
    }
+}
 
+void remove_from_bitvector( NODE *node){
+   int mem_index = find_memory_index(node->content.file_desc.name);
+   int bv_index = 
 
 }
 
