@@ -3,94 +3,7 @@
 * Project 1 task 1
 * 4/5/2018
 */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-#include <string.h>
-
-#define BLOCK_SIZE 256
-#define MAX_MEMORY 65536
-#define MAX_NAME_LENGTH 128
-#define DATA_SIZE 254
-#define INDEX_SIZE 127
-#define ERROR -1
-
-/*
-   
-                     Access Rights
-
-Number   Octal Permission Representation                                Ref
-0        No permission                                                  ---
-1        Execute permission                                             --x
-2        Write permission                                               -w-
-3        Execute and write permission: 1 (execute) + 2 (write) = 3      -wx
-4        Read permission                                                r--
-5        Read and execute permission: 4 (read) + 1 (execute) = 5        r-x
-6        Read and write permission: 4 (read) + 2 (write) = 6            rw-
-7        All permissions: 4 (read) + 2 (write) + 1 (execute) = 7        rwx
-
-*/
-
-typedef char data_t;
-typedef unsigned short index_t;  
-
-typedef enum {DIRECTORY_ND=0, FILE_ND, INDEX_ND, DATA_ND} NODE_TYPE;
-
-typedef struct fd_node {
-
-   char name[MAX_NAME_LENGTH];
-   time_t creation_time;
-   time_t last_access;
-   time_t last_modification;
-   mode_t access_rights;
-   unsigned short owner_id;
-   unsigned short size;
-   index_t block_ref;
-
-} FD_NODE;
-
-typedef struct node {
-
-   NODE_TYPE type;
-
-   union {
-      FD_NODE file_desc;
-      data_t data[DATA_SIZE];
-      index_t index[INDEX_SIZE];
-   } content;
-
-} NODE;
-
-// storage blocks
-
-NODE *memory[MAX_MEMORY]; // allocate 2^16 blocks (in init)
-char *bitvector; // allocate space for managing 2^16 blocks (in init) for managing 2^16 blocks (in init)
-//
-void file_system_create();
-void file_create(NODE *directory_node);
-void directory_create(NODE *directory_node);
-void file_delete(NODE *file_node);
-void directory_delete(NODE *directory_node);
-//
-void create_superblock();
-int find_empty_memory_index();
-void place_in_memory(NODE *node);
-void allocate_blocks();
-int find_empty_indexND_index(NODE *index_node);
-void place_in_indexND(NODE *file_node, NODE *index_node);
-void free_nodes();
-void free_blocks();
-
-// bitvector operations
-void display_bitvector();
-void mark_in_bitvector(char *bitvector);
-char set(char byte, int bit_position);
-char clear(char byte, int bit_position);
-bool is_bit_set(char byte, int bit_position);
-void mark_empty_bit(char *bitvector);
-
+#include "filesystem.h"
 
 int main(int argc, char *argv[]) {
    file_system_create();
@@ -105,10 +18,10 @@ void file_system_create() {
    create_superblock();
 }
 
-void directory_create(NODE *directory_node){
-   
+void directory_create(NODE *directory_node) {
+
    time_t start = time(NULL);
-  
+
 
    NODE *directory = malloc(sizeof(NODE));
    NODE *index_node = malloc(sizeof(NODE));
@@ -132,20 +45,6 @@ void file_create(NODE *directory_node) {
    place_in_memory(file_node);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -178,11 +77,11 @@ void create_superblock() {
 }
 
 
-void find_memory_index(char name[]){
+int find_memory_index(char name[]) {
    int index;
    int found = 0;
-   for(index = 0; index < MAX_MEMORY; index++){
-      if(strcmp(name, memory[index]->content.file_desc.name) == found){
+   for (index = 0; index < MAX_MEMORY; index++) {
+      if (strcmp(name, memory[index]->content.file_desc.name) == found) {
          return index;
       }
    }
@@ -198,7 +97,7 @@ void place_in_memory(NODE *node) {
    if (index != ERROR) {
       node->content.file_desc.block_ref = index;
       memory[index] = node;
-      mark_empty_bit(bitvector);
+      mark_empty_bit(bitvector, node);
    } else {
       printf("ERROR: in place_in_memory\n");
    }
@@ -239,7 +138,7 @@ int find_empty_memory_index() {
    return ERROR;
 }
 
-void mark_empty_bit(char *bitvector) {
+void mark_empty_bit(char *bitvector, NODE *node) {
 
    int bv_index;
    int bit_position;
@@ -252,6 +151,8 @@ void mark_empty_bit(char *bitvector) {
          if (is_bit_set(bitvector[bv_index], bit_position) == false) {
 
             bitvector[bv_index] = set(bitvector[bv_index], bit_position);
+            node->bit_position = bit_position;
+            node->byte_index = bv_index;
             return;
 
          }
@@ -259,9 +160,9 @@ void mark_empty_bit(char *bitvector) {
    }
 }
 
-void remove_from_bitvector( NODE *node){
-   int mem_index = find_memory_index(node->content.file_desc.name);
-   int bv_index = 
+void remove_from_bitvector( NODE *node) {
+  // int mem_index = find_memory_index(node->content.file_desc.name);
+  // int bv_index =
 
 }
 
