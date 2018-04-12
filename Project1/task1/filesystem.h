@@ -1,12 +1,12 @@
-#ifndef  _headers_h_
-#define  _headers_h_
+#ifndef  _filesystem_h_
+#define  _filesystem_h_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
-#include "headers.h"
+#include "filesystem.h"
 
 #define BLOCK_SIZE 256
 #define MAX_MEMORY 65536
@@ -59,8 +59,8 @@ typedef struct node {
       index_t index[INDEX_SIZE];
    } content;
 
-   int byte_index;
-   int bit_position;
+   //int byte_index; not needed
+   //int bit_position; not needed
 
 } NODE;
 

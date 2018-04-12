@@ -4,7 +4,7 @@
 * 4/5/2018
 */
 
-#include "headers.h"
+#include "filesystem.h"
 
 /*
 
@@ -211,10 +211,11 @@ void display_bitvector() {
 
 bool is_bit_set(char *bitvector) {
 
-   int byte = (bitvector / 8);
-   bit_position = (byte % (index in memory));
-   
-   return ((byte & (1 << bit_position)) != 0);
+   int byte = (bitvector / 8); maybe sizeof(bitvector)? already know the size of the bitvector?.
+
+   bit_position = (byte % (index in memory)); maybe**
+
+   bitvector = ((byte & (1 << bit_position)) != 0); maybe**
 }
 
 char set(char byte, int bit_position) {

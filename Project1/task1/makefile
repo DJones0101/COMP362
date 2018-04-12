@@ -4,7 +4,7 @@
 # clean removes the exe
 
 all: filesystem.c 
-	gcc -g -Wall -o filesystem filesystem.c main.c headers.h
+	gcc -g -Wall -o filesystem filesystem.c main.c filesystem.h
 
 clean: 
 	$(RM) filesystem
