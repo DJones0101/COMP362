@@ -3,6 +3,7 @@
 * Project 1 task 1
 * 4/5/2018
 */
+
 #include "headers.h"
 
 /*
@@ -22,8 +23,35 @@
 
 void file_system_create() {
 
-  // allocate_blocks();
+  allocate_blocks();
   // create_superblock();
+}
+
+void allocate_blocks() {
+
+   bitvector = malloc(sizeof(char) * (MAX_MEMORY/8));
+   int count;
+   for (count = 0; count < MAX_MEMORY; count++) {
+      memory[count] = malloc(sizeof(NODE));
+   }
+}
+
+void create_superblock() {
+
+   time_t start = time(NULL);
+
+   NODE *SUPERBLOCK = malloc(sizeof(NODE));
+   NODE *SB_INDEX_ND = malloc(sizeof(NODE));
+
+   SUPERBLOCK->type = DIR_ND;
+   SB_INDEX_ND->type = INDEX_ND;
+
+   strcpy(SUPERBLOCK->content.file_desc.name, "/");
+   SUPERBLOCK->content.file_desc.creation_time = start;
+   SUPERBLOCK->content.file_desc.last_modification = start;
+   SUPERBLOCK->content.file_desc.last_access = start;
+   SUPERBLOCK->content.file_desc.access_rights = 0000;
+
 }
 
 /*
@@ -55,36 +83,6 @@ void file_create(NODE *directory_node) {
    file_node->content.file_desc.access_rights = 0777;
    //file_desc->content.
    place_in_memory(file_node);
-
-}
-
-
-
-void allocate_blocks() {
-
-   bitvector = calloc(BLOCK_SIZE, sizeof(char));
-   int count;
-   for (count = 0; count < MAX_MEMORY; count++) {
-      memory[count] = malloc(sizeof(NODE));
-   }
-}
-
-void create_superblock() {
-
-   time_t start = time(NULL);
-
-   NODE *SUPERBLOCK = malloc(sizeof(NODE));
-   NODE *SB_INDEX_ND = malloc(sizeof(NODE));
-
-   SUPERBLOCK->type = DIRECTORY_ND;
-   strcpy(SUPERBLOCK->content.file_desc.name, "/");
-   SUPERBLOCK->content.file_desc.creation_time = start;
-   SUPERBLOCK->content.file_desc.last_modification = start;
-   SUPERBLOCK->content.file_desc.last_access = start;
-   SUPERBLOCK->content.file_desc.access_rights = 0000;
-   SB_INDEX_ND->type =  INDEX_ND;
-   place_in_memory(SUPERBLOCK);
-   place_in_memory(SB_INDEX_ND);
 
 }
 
@@ -207,13 +205,15 @@ void display_bitvector() {
    (bitvector / 8) gives the byte.
    index in memory gives the bit positon.
 
-   byte = (bitvector / 8);
-
-   new_char = (byte % (index in memory));
+  
 
 
 
-bool is_bit_set(char byte, int bit_position) {
+bool is_bit_set(char *bitvector) {
+
+   int byte = (bitvector / 8);
+   bit_position = (byte % (index in memory));
+   
    return ((byte & (1 << bit_position)) != 0);
 }
 
