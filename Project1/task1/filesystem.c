@@ -3,21 +3,30 @@
 * Project 1 task 1
 * 4/5/2018
 */
-#include "filesystem.h"
+#include "headers.h"
 
-int main(int argc, char *argv[]) {
-   file_system_create();
-   display_bitvector();
-   return 0;
-}
+/*
 
+   Redo the the bitvector. the size should be number of block / 8, which is 
+   65536/8 = 8192. Indexes of the bitvector are from 0 to 8191 {not 0...7, 0...7}.
+   This will make it easy to delete things later.
+
+   The permissions of everything create should be read and write 0777.
+
+   bitvector operations : 
+       set
+       clear
+       display
+
+*/
 
 void file_system_create() {
 
-   allocate_blocks();
-   create_superblock();
+  // allocate_blocks();
+  // create_superblock();
 }
 
+/*
 void directory_create(NODE *directory_node) {
 
    time_t start = time(NULL);
@@ -42,6 +51,9 @@ void file_create(NODE *directory_node) {
 
    NODE *file_node = malloc(sizeof(NODE));
    file_node->type = FILE_ND;
+   //file_node->content.file_desc.creation_time = 
+   file_node->content.file_desc.access_rights = 0777;
+   //file_desc->content.
    place_in_memory(file_node);
 
 }
@@ -160,9 +172,15 @@ void mark_empty_bit(char *bitvector, NODE *node) {
    }
 }
 
+void mark_remove_bit(char *bitvector, NODE *node) {
+
+
+}
+
+
+
 void remove_from_bitvector( NODE *node) {
-  // int mem_index = find_memory_index(node->content.file_desc.name);
-  // int bv_index =
+
 
 }
 
@@ -186,6 +204,15 @@ void display_bitvector() {
 
 
 
+   (bitvector / 8) gives the byte.
+   index in memory gives the bit positon.
+
+   byte = (bitvector / 8);
+
+   new_char = (byte % (index in memory));
+
+
+
 bool is_bit_set(char byte, int bit_position) {
    return ((byte & (1 << bit_position)) != 0);
 }
@@ -197,6 +224,9 @@ char set(char byte, int bit_position) {
 char clear(char byte, int bit_position) {
    return (byte & (~(1 << bit_position)));
 }
+
+
+*/
 
 
 
