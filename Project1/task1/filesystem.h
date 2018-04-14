@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include "filesystem.h"
 
 #define BLOCK_SIZE 256
@@ -13,6 +15,7 @@
 #define MAX_NAME_LENGTH 128
 #define DATA_SIZE 254
 #define INDEX_SIZE 127
+#define BITVECTOR_SIZE (MAX_MEMORY/8)
 #define ERROR -1
 
 /*
@@ -68,29 +71,24 @@ typedef struct node {
 // owener id = pid
 
 NODE *memory[MAX_MEMORY]; // allocate 2^16 blocks (in init)
-char *bitvector; 
-//
+char *bitvector;
+
 void file_system_create();
-void file_create(NODE *directory_node);
+void file_create(NODE *directory_node, char *name);
 void directory_create(NODE *directory_node);
 void file_delete(NODE *file_node);
 void directory_delete(NODE *directory_node);
 void create_superblock();
-int find_empty_memory_index();
-void place_in_memory(NODE *node);
-void allocate_blocks();
-int find_empty_indexND_index(NODE *index_node);
-void place_in_indexND(NODE *file_node, NODE *index_node);
-void free_nodes();
-void free_blocks();
+void allocate();
+int assign_index();
+void free();
 
 // bitvector operations
 void display_bitvector();
-void mark_in_bitvector(char *bitvector);
-char set(char byte, int bit_position);
-char clear(char byte, int bit_position);
-bool is_bit_set(char byte, int bit_position);
-void mark_empty_bit(char *bitvector, NODE *node);
-void mark_remove_bit(char *bitvector, NODE *node); 
+void set_bit(int memory_index);
+void clear_bit(int memory_index);
+bool test_bit(int memory_index);
+void add_to_bitvector(int memory_index);
+void remove_from_bitvector(int memory_index);
 
 #endif
