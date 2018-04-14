@@ -1,3 +1,9 @@
+/*
+* Darius Jones
+* Project 1 task 1
+* 4/5/2018
+*/
+
 #ifndef  _filesystem_h_
 #define  _filesystem_h_
 
@@ -53,7 +59,6 @@ typedef struct fd_node {
 } FD_NODE;
 
 typedef struct node {
-
    NODE_TYPE type;
 
    union {
@@ -61,26 +66,20 @@ typedef struct node {
       data_t data[DATA_SIZE];
       index_t index[INDEX_SIZE];
    } content;
-
-   //int byte_index; not needed
-   //int bit_position; not needed
-
 } NODE;
-
-// storage blocks
-// owener id = pid
 
 NODE *memory[MAX_MEMORY]; // allocate 2^16 blocks (in init)
 char *bitvector;
 
 void file_system_create();
 void file_create(NODE *directory_node, char *name);
-void directory_create(NODE *directory_node);
+void directory_create(NODE *directory_node, char *name);
 void file_delete(NODE *file_node);
 void directory_delete(NODE *directory_node);
 void create_superblock();
 void allocate();
-int assign_index();
+int get_free_index();
+void assign_to_index_node(NODE *index_node, int memory_index);
 void free();
 
 // bitvector operations

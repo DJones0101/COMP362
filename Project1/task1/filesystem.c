@@ -24,7 +24,16 @@
 void file_system_create() {
    allocate();
    create_superblock();
-   file_create(memory[0], "/home");
+   
+   file_create(memory[0], "file.txt");
+   directory_create(memory[0], "/sub_folder");
+   display_bitvector();
+}
+
+void file_delete(NODE *file_node) {
+
+
+
 }
 
 
@@ -32,7 +41,8 @@ void file_create(NODE *directory_node, char *name) {
 
    NODE *file_node = malloc(sizeof(NODE));
    time_t start = time(NULL);
-   int memory_index = assign_index();
+   int memory_index = get_free_index();
+   add_to_bitvector(memory_index);
    file_node->type = FILE_ND;
    strcpy(file_node->content.file_desc.name, name);
    file_node->content.file_desc.creation_time = start;
@@ -43,8 +53,46 @@ void file_create(NODE *directory_node, char *name) {
    add_to_bitvector(memory_index);
 }
 
-void directory_create(NODE *directory_node){
-   
+void directory_create(NODE *directory_node, char *name) {
+
+   time_t start = time(NULL);
+   int dir_index = get_free_index();
+   add_to_bitvector(dir_index);
+   int memory_index = get_free_index();
+   add_to_bitvector(memory_index);
+
+   NODE *home_index = memory[directory_node->content.file_desc.block_ref];
+   assign_to_index_node(home_index, dir_index);
+
+   NODE *new_directory = malloc(sizeof(NODE));
+   NODE *index_node = malloc(sizeof(NODE));
+
+   new_directory->type = DIR_ND;
+   index_node->type = INDEX_ND;
+
+   memory[dir_index] = new_directory;
+   memory[memory_index] = index_node;
+
+   strcpy(new_directory->content.file_desc.name, name);
+   new_directory->content.file_desc.creation_time = start;
+   new_directory->content.file_desc.last_modification = start;
+   new_directory->content.file_desc.last_access = start;
+   new_directory->content.file_desc.owner_id = getpid();
+   new_directory->content.file_desc.access_rights = 0777;
+   new_directory->content.file_desc.block_ref = memory_index;
+
+}
+
+void assign_to_index_node(NODE *index_node, int memory_index) {
+
+   int count;
+   for (count = 0; count < INDEX_SIZE; count++) {
+      if (index_node->content.index[count] != 0) {
+         index_node->content.index[count] = memory_index;
+         return;
+      }
+   }
+
 }
 
 void allocate() {
@@ -94,10 +142,10 @@ void clear_bit(int memory_index) {
    bitvector[byte] = (bitvector[byte] & (~(1 << bit)));
 }
 
-int assign_index(){
+int get_free_index() {
    int index;
-   for(index = 0; index < MAX_MEMORY; index++){
-      if(test_bit(index) == false){
+   for (index = 0; index < MAX_MEMORY; index++) {
+      if (test_bit(index) == false) {
          return index;
       }
    }
