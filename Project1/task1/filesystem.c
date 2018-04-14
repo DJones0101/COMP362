@@ -6,43 +6,83 @@
 
 #include "filesystem.h"
 
-/*
-
-   Redo the the bitvector. the size should be number of block / 8, which is
-   65536/8 = 8192. Indexes of the bitvector are from 0 to 8191 {not 0...7, 0...7}.
-   This will make it easy to delete things later.
-
-   The permissions of everything create should be read and write 0777.
-
-   bitvector operations :
-       set
-       clear
-       display
-
-*/
-
 void file_system_create() {
    allocate();
    create_superblock();
-   
-   file_create(memory[0], "file.txt");
-   directory_create(memory[0], "/sub_folder");
-   display_bitvector();
 }
 
-void file_delete(NODE *file_node) {
+void file_delete(NODE *home_dir, char *name) {
 
+   //int data_index = file_node->content.file_desc.block_ref;
+   //NODE *data_holder = memory[data_index];
+
+   //remove_from_bitvector(data_index);
+
+   /*if(data_holder->type == DATA_ND){
+
+      memset(data_holder->content.index,'0',DATA_SIZE);
+
+   }else if(data_holder->type == INDEX_ND){
+      int count;
+      for(count = 0; count < INDEX_SIZE; count++){
+         data_holder->content.index[count] = 0;
+      }
+
+   }*/
+
+   //free(data_holder);
+
+
+   int count;
+
+   for (count = 0; count < MAX_MEMORY; count++) {
+
+      if (memory[count]->type == FILE_ND) {
+
+         bool found = (strcmp(memory[count]->content.file_desc.name, name) == 0) ? true : false;
+
+         if(found == true){
+            remove_from_bitvector(count);
+            
+            //free(memory[count]);
+            break;
+         }
+
+      }
+   }
+
+   directoryIndex_remove(home_dir);
+   time_t start = time(NULL);
+
+   // go back to original state
+   NODE *dead_file = memory[count];
+   strcpy(dead_file->content.name,"");
+   dead_file->contentcontent.file_desc.creation_time = start;
+   dead_file->content.file_desc.last_modification = start;
+   dead_file->content.file_desc.last_access = start;
 
 
 }
 
 
-void file_create(NODE *directory_node, char *name) {
+
+
+
+void file_create(NODE *home_dir, char *name) {
 
    NODE *file_node = malloc(sizeof(NODE));
+   //NODE *data_node = malloc(sizeof(NODE));
+
+   int file_index = get_free_index();
+   add_to_bitvector(file_index);
+
+   //int data_index = get_free_index();
+   //add_to_bitvector(data_index);
+
+   directoryIndex_add(home_dir, file_index);
+   //directoryIndex_add(home_dir,data_index);
+
    time_t start = time(NULL);
-   int memory_index = get_free_index();
-   add_to_bitvector(memory_index);
    file_node->type = FILE_ND;
    strcpy(file_node->content.file_desc.name, name);
    file_node->content.file_desc.creation_time = start;
@@ -50,19 +90,26 @@ void file_create(NODE *directory_node, char *name) {
    file_node->content.file_desc.last_access = start;
    file_node->content.file_desc.owner_id = getpid();
    file_node->content.file_desc.access_rights = 0777;
-   add_to_bitvector(memory_index);
+   file_node->content.file_desc.size = 0;
+   //file_node->content.file_desc.block_ref = data_index;
+
+   memory[file_index] = file_node;
+   //memory[data_index] = data_node;
+
 }
 
-void directory_create(NODE *directory_node, char *name) {
+void directory_create(NODE *home_dir, char *name) {
 
    time_t start = time(NULL);
+
    int dir_index = get_free_index();
    add_to_bitvector(dir_index);
+
    int memory_index = get_free_index();
    add_to_bitvector(memory_index);
 
-   NODE *home_index = memory[directory_node->content.file_desc.block_ref];
-   assign_to_index_node(home_index, dir_index);
+   directoryIndex_add(home_dir, dir_index);
+
 
    NODE *new_directory = malloc(sizeof(NODE));
    NODE *index_node = malloc(sizeof(NODE));
@@ -70,8 +117,7 @@ void directory_create(NODE *directory_node, char *name) {
    new_directory->type = DIR_ND;
    index_node->type = INDEX_ND;
 
-   memory[dir_index] = new_directory;
-   memory[memory_index] = index_node;
+
 
    strcpy(new_directory->content.file_desc.name, name);
    new_directory->content.file_desc.creation_time = start;
@@ -80,6 +126,10 @@ void directory_create(NODE *directory_node, char *name) {
    new_directory->content.file_desc.owner_id = getpid();
    new_directory->content.file_desc.access_rights = 0777;
    new_directory->content.file_desc.block_ref = memory_index;
+   new_directory->content.file_desc.size = 0;
+
+   memory[dir_index] = new_directory;
+   memory[memory_index] = index_node;
 
 }
 
@@ -162,7 +212,7 @@ bool test_bit(int memory_index) {
 void display_bitvector() {
    int index;
    int bit_counter = 0;
-   for (index = 0;  index < 256; index++) { // we don't need to print them all, there's to many.
+   for (index = 0;  index < 80; index++) { // we don't need to print them all, there's to many.
 
       if (bit_counter == 0) {
          printf("byte # %d: ", index / 8);
@@ -179,6 +229,17 @@ void display_bitvector() {
 }
 
 
+void directoryIndex_add(NODE *home_dir, int index) { // adding to contnent of a directory
+   int homeDirIndexNode = home_dir->content.file_desc.block_ref;
+   assign_to_index_node(memory[homeDirIndexNode], index);
+   home_dir->content.file_desc.size++;
+}
+
+void directoryIndex_remove(NODE *home_dir) { // remove contnent from a directory
+   int homeDirIndexNode = home_dir->content.file_desc.block_ref;
+   //memory[homeDirIndexNode]->content.index[index] = 0;
+   home_dir->content.file_desc.size--;
+}
 
 
 

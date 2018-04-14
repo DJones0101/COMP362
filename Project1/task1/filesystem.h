@@ -72,14 +72,16 @@ NODE *memory[MAX_MEMORY]; // allocate 2^16 blocks (in init)
 char *bitvector;
 
 void file_system_create();
-void file_create(NODE *directory_node, char *name);
+void file_create(NODE *home_dir, char *name);
 void directory_create(NODE *directory_node, char *name);
-void file_delete(NODE *file_node);
+void file_delete(NODE *home_dir, char *name);
 void directory_delete(NODE *directory_node);
 void create_superblock();
 void allocate();
 int get_free_index();
 void assign_to_index_node(NODE *index_node, int memory_index);
+void directoryIndex_add(NODE *home_dir, int index);
+void directoryIndex_remove(NODE *home_dir);
 void free();
 
 // bitvector operations
