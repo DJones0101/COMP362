@@ -82,7 +82,7 @@ int get_free_index();
 void assign_to_index_node(NODE *index_node, int memory_index);
 void directoryIndex_add(NODE *home_dir, int index);
 void directoryIndex_remove(NODE *home_dir);
-void free();
+void free_system();
 
 // bitvector operations
 void display_bitvector();

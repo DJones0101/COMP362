@@ -23,5 +23,6 @@ int main(int argc, char *argv[]) {
 	display_bitvector();
 	printf("-------------------------------directory_delete() with a file inside it \n");
 
+	free_system();
 	return 0;
 }

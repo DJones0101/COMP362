@@ -11,27 +11,12 @@ void file_system_create() {
    create_superblock();
 }
 
+void directory_delete(NODE *directory_node){
+
+}
+
+
 void file_delete(NODE *home_dir, char *name) {
-
-   //int data_index = file_node->content.file_desc.block_ref;
-   //NODE *data_holder = memory[data_index];
-
-   //remove_from_bitvector(data_index);
-
-   /*if(data_holder->type == DATA_ND){
-
-      memset(data_holder->content.index,'0',DATA_SIZE);
-
-   }else if(data_holder->type == INDEX_ND){
-      int count;
-      for(count = 0; count < INDEX_SIZE; count++){
-         data_holder->content.index[count] = 0;
-      }
-
-   }*/
-
-   //free(data_holder);
-
 
    int count;
 
@@ -41,9 +26,8 @@ void file_delete(NODE *home_dir, char *name) {
 
          bool found = (strcmp(memory[count]->content.file_desc.name, name) == 0) ? true : false;
 
-         if(found == true){
+         if (found == true) {
             remove_from_bitvector(count);
-            
             //free(memory[count]);
             break;
          }
@@ -51,15 +35,38 @@ void file_delete(NODE *home_dir, char *name) {
       }
    }
 
+
+   NODE *to_delete = memory[count];
+   int data_index = to_delete->content.file_desc.block_ref;
+   NODE *data_holder = memory[data_index];
+
+   remove_from_bitvector(data_index);
+
+   if (data_holder->type == DATA_ND) {
+
+      int index;
+      for (index = 0; index < INDEX_SIZE; index++) {
+         data_holder->content.data[count] = '0';
+      }
+
+   } else if (data_holder->type == INDEX_ND) {
+      int index;
+      for (index = 0; index < INDEX_SIZE; index++) {
+         data_holder->content.index[count] = 0;
+      }
+
+   }
+
    directoryIndex_remove(home_dir);
    time_t start = time(NULL);
 
    // go back to original state
    NODE *dead_file = memory[count];
-   strcpy(dead_file->content.name,"");
-   dead_file->contentcontent.file_desc.creation_time = start;
+   strcpy(dead_file->content.file_desc.name, "");
+   dead_file->content.file_desc.creation_time = start;
    dead_file->content.file_desc.last_modification = start;
    dead_file->content.file_desc.last_access = start;
+   dead_file->content.file_desc.size = 0;
 
 
 }
@@ -236,9 +243,19 @@ void directoryIndex_add(NODE *home_dir, int index) { // adding to contnent of a 
 }
 
 void directoryIndex_remove(NODE *home_dir) { // remove contnent from a directory
-   int homeDirIndexNode = home_dir->content.file_desc.block_ref;
+   //int homeDirIndexNode = home_dir->content.file_desc.block_ref;
    //memory[homeDirIndexNode]->content.index[index] = 0;
    home_dir->content.file_desc.size--;
+}
+
+void free_system() {
+   int count;
+   for (count = 0; count < MAX_MEMORY; count++) {
+      free(memory[count]);
+   }
+
+   free(bitvector);
+
 }
 
 
