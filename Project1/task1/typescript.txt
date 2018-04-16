@@ -1,0 +1,99 @@
+/*
+* Darius Jones
+* Project 1 task 1
+* 4/15/2018
+*/
+
+darius@dj:~/Desktop/COMP362/Project1/task1$ make
+gcc -g -Wall -o filesystem filesystem.c main.c filesystem.h
+darius@dj:~/Desktop/COMP362/Project1/task1$ make run
+./filesystem 
+new filesystem (superblock and it's index_nd)
+byte # 0: 1 1 0 0 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------created a new directory within the superblock
+byte # 0: 1 1 1 1 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------created a new file within the new directory
+byte # 0: 1 1 1 1 1 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------deleted the file
+byte # 0: 1 1 1 1 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------created a new file within the new directory
+byte # 0: 1 1 1 1 1 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------deleted the directory with the file in it
+byte # 0: 1 1 0 0 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------created a new file within the  superblock
+byte # 0: 1 1 1 0 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+------------------------------deleted the file in the superblock
+byte # 0: 1 1 0 0 0 0 0 0 
+byte # 1: 0 0 0 0 0 0 0 0 
+byte # 2: 0 0 0 0 0 0 0 0 
+byte # 3: 0 0 0 0 0 0 0 0 
+byte # 4: 0 0 0 0 0 0 0 0 
+byte # 5: 0 0 0 0 0 0 0 0 
+byte # 6: 0 0 0 0 0 0 0 0 
+byte # 7: 0 0 0 0 0 0 0 0 
+byte # 8: 0 0 0 0 0 0 0 0 
+byte # 9: 0 0 0 0 0 0 0 0 
+darius@dj:~/Desktop/COMP362/Project1/task1$ 

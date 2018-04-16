@@ -1,27 +1,38 @@
 /*
 * Darius Jones
 * Project 1 task 1
-* 4/5/2018
+* 4/15/2018
 */
 
 #include "filesystem.h"
 
-int main(int argc, char *argv[]) {	
+int main(int argc, char *argv[]) {
 
+	printf("new filesystem (superblock and it's index_nd)\n");
 	file_system_create();
-	printf("-------------------------------directory_create(), file_create()\n");
-	directory_create(memory[0], "/sub_dir");
-	file_create(memory[2],"info.txt");
+	display_bitvector();
+	directory_create(memory[0], "/sub");
+	printf("------------------------------created a new directory within the superblock\n");
+	display_bitvector();
+	printf("------------------------------created a new file within the new directory\n");
+	file_create(memory[2], "file.txt");
+	display_bitvector();
+	printf("------------------------------deleted the file\n");
+	file_delete(memory[2], "file.txt");
+	display_bitvector();
+	printf("------------------------------created a new file within the new directory\n");
+	file_create(memory[2], "file.txt");
+	display_bitvector();
+	printf("------------------------------deleted the directory with the file in it\n");
+	directory_delete(memory[2],memory[0]);
+	display_bitvector();
+	printf("------------------------------created a new file within the  superblock\n");
+	file_create(memory[0], "file.txt");
+	display_bitvector();
+	file_delete(memory[2], "file.txt");
+	printf("------------------------------deleted the file in the superblock\n");
 	display_bitvector();
 
-	printf("-------------------------------After file_delete()\n");
-
-	file_delete(memory[2],"info.txt");
-	display_bitvector();
-	file_create(memory[2],"info.txt");
-	printf("-------------------------------file_create() again \n");
-	display_bitvector();
-	printf("-------------------------------directory_delete() with a file inside it \n");
 
 	free_system();
 	return 0;

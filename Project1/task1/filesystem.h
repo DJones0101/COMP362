@@ -1,7 +1,7 @@
 /*
 * Darius Jones
 * Project 1 task 1
-* 4/5/2018
+* 4/15/2018
 */
 
 #ifndef  _filesystem_h_
@@ -75,14 +75,16 @@ void file_system_create();
 void file_create(NODE *home_dir, char *name);
 void directory_create(NODE *directory_node, char *name);
 void file_delete(NODE *home_dir, char *name);
-void directory_delete(NODE *directory_node);
+int find_node(char *name);
+void directory_delete(NODE *directory_node, NODE *home_dir);
+void delete_by_name(char *name);
 void create_superblock();
 void allocate();
 int get_free_index();
 void assign_to_index_node(NODE *index_node, int memory_index);
 void directoryIndex_add(NODE *home_dir, int index);
-void directoryIndex_remove(NODE *home_dir);
 void free_system();
+int find_index_slot(NODE *index_nd, int memory_location);
 
 // bitvector operations
 void display_bitvector();
@@ -92,4 +94,4 @@ bool test_bit(int memory_index);
 void add_to_bitvector(int memory_index);
 void remove_from_bitvector(int memory_index);
 
-#endif
+#endif   
