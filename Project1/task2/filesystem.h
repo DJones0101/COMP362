@@ -170,6 +170,9 @@ GLOBAL_ITEM global_table[GLOBAL_TABLE_SIZE];
 
 */
 
+// http://www.partow.net/programming/hashfunctions/#SDBMHashFunction 
+
+
 //hash functions   THESE ARE MAYBES!
 unsigned short hash_code(char *key);
 //void* search(int key);
