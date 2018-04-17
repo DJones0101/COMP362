@@ -109,14 +109,14 @@ typedef struct open_file_global_type // elements of the hash table (in-memory "d
 } OPEN_FILE_GLOBAL_TYPE;
 
 #define GLOBAL_TABLE_SIZE 65521 // prime number for hashing
-OPEN_FILE_GLOBAL_TABLE global_table[GLOBAL_TABLE_SIZE];
+OPEN_FILE_GLOBAL_TYPE global_table[GLOBAL_TABLE_SIZE];
 
 // local table
 
 typedef struct open_file_local_type // a node for a local list of open files (per process)
 {
    mode_t access_rights; // access rights for this process
-   unsigned_short global_ref; // reference to the entry for the file in the global table
+   unsigned short global_ref; // reference to the entry for the file in the global table
 } OPEN_FILE_LOCAL_TYPE;
 
 #define MAX_OPEN_FILES_PER_PROCESS 16
