@@ -86,6 +86,8 @@ void directoryIndex_add(NODE *home_dir, int index);
 void free_system();
 int find_index_slot(NODE *index_nd, int memory_location);
 
+
+
 // bitvector operations
 void display_bitvector();
 void set_bit(int memory_index);
@@ -94,33 +96,145 @@ bool test_bit(int memory_index);
 void add_to_bitvector(int memory_index);
 void remove_from_bitvector(int memory_index);
 
-//----------------------------------------------------------------------------------------------------
+//--------------------------------Task 2--------------------------------------------------------------------
 
-// global table
 
-typedef struct open_file_global_type // elements of the hash table (in-memory "directory")
-{
-   unsigned short fd; // reference to the file descriptor node
-   unsigned short data; // reference to the data or index node (depending on the size)
-   mode_t access; // access rights for the file
-   unsigned short size; // size of the file
-   unsigned short reference_count; // reference count
-   struct open_file_global_type *next;
-} OPEN_FILE_GLOBAL_TYPE;
-
-#define GLOBAL_TABLE_SIZE 65521 // prime number for hashing
-OPEN_FILE_GLOBAL_TYPE global_table[GLOBAL_TABLE_SIZE];
-
-// local table
-
-typedef struct open_file_local_type // a node for a local list of open files (per process)
-{
-   mode_t access_rights; // access rights for this process
-   unsigned short global_ref; // reference to the entry for the file in the global table
-} OPEN_FILE_LOCAL_TYPE;
 
 #define MAX_OPEN_FILES_PER_PROCESS 16
-OPEN_FILE_LOCAL_TYPE local_table[MAX_OPEN_FILES_PER_PROCESS];
+#define GLOBAL_TABLE_SIZE 65521 // prime number for hashing
+
+
+typedef struct global_item{ // elements of the hash table (in-memory "directory")
+
+   unsigned short fd; // reference to the file descriptor node
+   unsigned short data_index; // reference to the data or index node (depending on the size)
+   unsigned short reference_count; 
+   mode_t access_rights;
+   unsigned short size; 
+   struct GLOBAL_ITEM *next; // chaining for collison detection
+
+} GLOBAL_ITEM;
+
+typedef struct local_item{ // a node for a local list of open files (per process)
+
+   mode_t access_rights; // access rights for this process
+   unsigned short global_ref; // reference to the entry for the file in the global table
+
+} LOCAL_ITEM;
+
+
+LOCAL_ITEM local_table[MAX_OPEN_FILES_PER_PROCESS];
+GLOBAL_ITEM global_table[GLOBAL_TABLE_SIZE];
+
+
+/*
+
+   Comments / Questions / Things to keep in mind:
+
+    1. SO, I have two data items and i need to make two tables for each.
+       (a). Use function pointers for the the fuctions to make them usable
+       in both tables.
+       (b). Use a switching function to handle the diffrent types.
+       (c). Combination of both.
+       (d). return void pointers. This involves checking the data type inside the
+        the functions.
+
+
+   
+   2. How will I intergrate this into opening, closing, reading, writing? 
+
+   3. File size using a data node or index node is now  important. Figure out a way to 
+      fit this in.
+
+
+   4. What role does the loca_item play (unsigned short global_ref) overall? 
+
+   You should distribute the information between the two tables; for example, 
+   the main table can keep the information about the location of the file, 
+   and the tables local to processes can keep specifics such as the access rights. 
+
+   5. It's posiable that we can't use the the same functions for both table beacause the 
+      global table use chaining while the local does not.
+
+      Different insert funtions for global and local? And maybe a switching funtion on the types?
+
+
+
+*/
+
+/*
+
+   key = file name (string)
+
+   value = ITEM (global or local)
+
+*/
+
+//hash functions   THESE ARE MAYBES!
+unsigned short hash_code(char *key);
+//void* search(int key);
+//void* delete_item(/* data_item*/);
+//void insert(int key, /* data*/);
+//void display_table();
+
+// bool is_type( void* item);
+
+
+ /*
+   
+   open(file, (open type read or write) )
+
+   When you open a file, you can use a system default for 
+   allocating some predefined space; or, you can just allocate 
+   the file descriptor node and postpone allocating more when a 
+   write is requested.When file grows, you can have another configuration 
+   option that states by how much the file should grow. 
+
+   directories are just special files, so they can be opened in the same way.
+   You do not have to implement caching.
+
+
+ */
+
+/*
+
+    close( file )
+
+   Be careful with processes calling close() function. 
+   If another process has the same file opened, you cannot 
+   remove the FCB from the global open file table; hence you
+   need a reference count. 
+
+*/
+
+/*
+
+   read( file )
+
+   check the access rights.
+
+   Recall that when a file is read, then frequently used elements 
+   of it's file control block are loaded into the main memory 
+   to improve efficiency. 
+
+   Usually there is a table of all open files, and a table of 
+   files opened by a specifc process
+
+*/
+
+/*
+
+   write( file )
+
+   check the access rights.
+
+   The write() function has to check the mode of the opened file, 
+   so read-only files are not overwritten.
+
+
+*/
+
+
 
 
 #endif   

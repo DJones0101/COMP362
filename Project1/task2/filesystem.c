@@ -295,6 +295,28 @@ void free_system() {
 
 }
 
+//--------------------------------Task 2--------------------------------------------------------------------
+
+
+ unsigned short hash_code(char *key){
+
+   //sdbm
+   unsigned short hash = 0;
+   unsigned short count;
+   int length = strlen(key);
+
+   for(count = 0; count < length; count++){
+
+      hash = key[count] + (hash << 6) + (hash << 16 ) - hash;
+   }
+
+   return hash;
+ }
+
+ void* search(char *key){
+
+ }
+
 
 
 
