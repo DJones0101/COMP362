@@ -23,6 +23,7 @@
 #define INDEX_SIZE 127
 #define BITVECTOR_SIZE (MAX_MEMORY/8)
 #define ERROR -1
+#define EMPTY -2
 
 /*
 
@@ -100,30 +101,31 @@ void remove_from_bitvector(int memory_index);
 
 
 
-#define MAX_OPEN_FILES_PER_PROCESS 16
-#define GLOBAL_TABLE_SIZE 65521 // prime number for hashing
+#define MAX_OPEN_PER_PROCESS 16
+#define GLOBAL_TABLE_SIZE  1000 //65521 
 
+typedef struct global_item GLOBAL_ITEM;
+typedef struct local_item LOCAL_ITEM;
 
-typedef struct global_item{ // elements of the hash table (in-memory "directory")
+struct global_item{ // elements of the hash table (in-memory "directory")
 
    unsigned short fd; // reference to the file descriptor node
    unsigned short data_index; // reference to the data or index node (depending on the size)
    unsigned short reference_count; 
    mode_t access_rights;
    unsigned short size; 
-   struct GLOBAL_ITEM *next; // chaining for collison detection
+   GLOBAL_ITEM *next; // chaining for collison detection
 
-} GLOBAL_ITEM;
+};
 
-typedef struct local_item{ // a node for a local list of open files (per process)
+struct local_item{ // a node for a local list of open files (per process)
 
    mode_t access_rights; // access rights for this process
    unsigned short global_ref; // reference to the entry for the file in the global table
 
-} LOCAL_ITEM;
+};
 
-
-LOCAL_ITEM local_table[MAX_OPEN_FILES_PER_PROCESS];
+LOCAL_ITEM local_table[MAX_OPEN_PER_PROCESS];
 GLOBAL_ITEM global_table[GLOBAL_TABLE_SIZE];
 
 
@@ -173,12 +175,14 @@ GLOBAL_ITEM global_table[GLOBAL_TABLE_SIZE];
 // http://www.partow.net/programming/hashfunctions/#SDBMHashFunction 
 
 
-//hash functions   THESE ARE MAYBES!
+//hash functions   
+void create_tables();
 unsigned short hash_code(char *key);
-//void* search(int key);
-//void* delete_item(/* data_item*/);
-//void insert(int key, /* data*/);
-//void display_table();
+GLOBAL_ITEM* get_item(char *key);
+void delete_item(char *key);
+void insert(char *key);
+void display_table();
+bool contains(char *name);
 
 // bool is_type( void* item);
 

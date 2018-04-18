@@ -6,6 +6,10 @@
 
 #include "filesystem.h"
 
+int numOfEntries_global = 0;
+int numOfEntries_local = 0;
+
+
 void file_system_create() {
    allocate();
    create_superblock();
@@ -13,7 +17,7 @@ void file_system_create() {
 
 
 void directory_delete(NODE *directory_node, NODE *home_dir) {
-   
+
    int index;
    int dir_location = find_node(directory_node->content.file_desc.name);
    int directory_node_indexND = directory_node->content.file_desc.block_ref;
@@ -21,32 +25,32 @@ void directory_delete(NODE *directory_node, NODE *home_dir) {
 
    bool is_superblock = (strcmp(directory_node->content.file_desc.name, "/") == 0) ? true : false;
 
-   if(is_superblock == true || (dir_location ==  0)){ return;} 
+   if (is_superblock == true || (dir_location ==  0)) { return;}
 
 
    int num_of_content = directory_node->content.file_desc.size;
 
-   for(index = 0; index < num_of_content; index++){
+   for (index = 0; index < num_of_content; index++) {
 
       int memory_location = dir_indexND->content.index[index];
-   
 
-      if(memory[memory_location]->type == DIR_ND){
+
+      if (memory[memory_location]->type == DIR_ND) {
 
          int memory_location = home_dir->content.file_desc.block_ref;
 
          // home_dir's indexND
          // memory[memory_location];
-         
-         int location_in_indexND = find_index_slot(memory[memory_location],dir_location);
+
+         int location_in_indexND = find_index_slot(memory[memory_location], dir_location);
          memory[memory_location]->content.index[location_in_indexND] = ERROR;
 
          directory_delete(directory_node, memory[memory_location]);
-      
-      }else if(memory[memory_location]->type == FILE_ND){
-         
+
+      } else if (memory[memory_location]->type == FILE_ND) {
+
          file_delete(directory_node, memory[memory_location]->content.file_desc.name);
-      
+
       }
    }
 
@@ -67,12 +71,12 @@ void file_delete(NODE *home_dir, char *name) {
    home_dir->content.file_desc.size--;
    memory[home_dir->content.file_desc.block_ref]->content.index[index] = -1;
 
-  // int data_index = file->content.file_desc.block_ref;
-  // NODE *data_holder = memory[data_index];
+   // int data_index = file->content.file_desc.block_ref;
+   // NODE *data_holder = memory[data_index];
    int file_index = find_node(name);
 
 
-   
+
 
    if (file->content.file_desc.size > 0 ) {
 
@@ -230,10 +234,10 @@ int find_node(char *name) {
    return ERROR;
 }
 
-int find_index_slot(NODE *index_nd, int memory_location){
+int find_index_slot(NODE *index_nd, int memory_location) {
    int count;
-   for(count = 0; count < INDEX_SIZE; count++){
-      if(memory_location == index_nd->content.index[count]){
+   for (count = 0; count < INDEX_SIZE; count++) {
+      if (memory_location == index_nd->content.index[count]) {
 
          return count;
       }
@@ -297,25 +301,143 @@ void free_system() {
 
 //--------------------------------Task 2--------------------------------------------------------------------
 
+void create_tables() {
+   int count;
+   for (count = 0; count < GLOBAL_TABLE_SIZE; count++) {
+      global_table[count].fd = EMPTY;
+   }
 
- unsigned short hash_code(char *key){
+   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
+      local_table[count].global_ref = EMPTY;
+   }
+}
 
-   //sdbm
+unsigned short hash_code(char *key) {
+
+   //sdbm hasing algorithm
    unsigned short hash = 0;
    unsigned short count;
    int length = strlen(key);
 
-   for(count = 0; count < length; count++){
+   for (count = 0; count < length; count++) {
 
       hash = key[count] + (hash << 6) + (hash << 16 ) - hash;
    }
 
    return hash;
- }
+}
 
- void* search(char *key){
 
- }
+void insert(char *key) {
+
+   unsigned short hash_index = hash_code(key);
+   unsigned short index_inMem = find_node(key);
+   NODE *file_desc_ND = memory[index_inMem];
+
+
+
+   if ( global_table[hash_index].fd == EMPTY) {
+
+      global_table[hash_index].fd = index_inMem;
+      global_table[hash_index].data_index = file_desc_ND->content.file_desc.block_ref;
+      global_table[hash_index].access_rights = file_desc_ND->content.file_desc.access_rights;
+      global_table[hash_index].size = file_desc_ND->content.file_desc.size;
+      global_table[hash_index].reference_count = 0;
+      global_table[hash_index].next = NULL;
+
+
+   } else if (global_table[hash_index].fd != EMPTY) {
+
+      global_table[hash_index].next->fd = index_inMem;
+      global_table[hash_index].next->data_index = file_desc_ND->content.file_desc.block_ref;
+      global_table[hash_index].next->access_rights = file_desc_ND->content.file_desc.access_rights;
+      global_table[hash_index].next->size = file_desc_ND->content.file_desc.size;
+      global_table[hash_index].next->reference_count = 0;
+
+   }
+
+}
+
+GLOBAL_ITEM* get_item(char *key) {
+
+   unsigned short hash_index = hash_code(key);
+
+   GLOBAL_ITEM* to_find = &global_table[hash_index];
+   bool found;
+   int count = 0;
+
+
+   while (count <= GLOBAL_TABLE_SIZE) {
+
+
+      found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
+
+      if(found == true){
+
+         break;
+      }
+
+      to_find = to_find->next;
+
+   }
+
+   return to_find;
+}
+
+void delete_item(char *key){
+
+   unsigned short hash_index = hash_code(key);
+
+   GLOBAL_ITEM* to_find = &global_table[hash_index];
+   bool found;
+   int count = 0;
+
+
+   while (count <= GLOBAL_TABLE_SIZE) {
+
+
+      found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
+
+      if(found == true){
+
+         break;
+      }
+
+      to_find = to_find->next;
+
+   }
+
+  to_find->fd = EMPTY;
+}
+
+bool contains(char *name){
+
+   unsigned short hash_index = hash_code(name);
+
+   GLOBAL_ITEM* to_find = &global_table[hash_index];
+   bool found;
+   int count = 0;
+
+
+   while (count <= GLOBAL_TABLE_SIZE) {
+
+
+      found = strcmp(memory[to_find->fd]->content.file_desc.name, name) ? true : false;
+
+      if(found == true){
+
+         return true;
+      }
+
+      to_find = to_find->next;
+
+   }
+
+  return false;
+
+}
+
+
 
 
 
