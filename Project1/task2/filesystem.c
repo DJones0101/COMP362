@@ -328,7 +328,7 @@ unsigned short hash_code(char *key) {
 }
 
 
-void insert(char *key) {
+void insert_global(char *key) {
 
    unsigned short hash_index = hash_code(key);
    unsigned short index_inMem = find_node(key);
@@ -348,17 +348,33 @@ void insert(char *key) {
 
    } else if (global_table[hash_index].fd != EMPTY) {
 
-      global_table[hash_index].next->fd = index_inMem;
-      global_table[hash_index].next->data_index = file_desc_ND->content.file_desc.block_ref;
-      global_table[hash_index].next->access_rights = file_desc_ND->content.file_desc.access_rights;
-      global_table[hash_index].next->size = file_desc_ND->content.file_desc.size;
-      global_table[hash_index].next->reference_count = 0;
+      GLOBAL_ITEM *to_insert = &global_table[hash_index];
+      bool inserted = false;
+
+      while (inserted == false) {
+
+         if (to_insert->fd == EMPTY) {
+
+            to_insert->fd = index_inMem;
+            to_insert->data_index = file_desc_ND->content.file_desc.block_ref;
+            to_insert->access_rights = file_desc_ND->content.file_desc.access_rights;
+            to_insert->size = file_desc_ND->content.file_desc.size;
+            to_insert->reference_count = 0;
+            to_insert->next = NULL;
+            inserted = true;
+
+         }
+
+         to_insert = to_insert->next;
+      }
+
+
 
    }
 
 }
 
-GLOBAL_ITEM* get_item(char *key) {
+GLOBAL_ITEM* get_item_global(char *key) {
 
    unsigned short hash_index = hash_code(key);
 
@@ -372,7 +388,7 @@ GLOBAL_ITEM* get_item(char *key) {
 
       found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
 
-      if(found == true){
+      if (found == true) {
 
          break;
       }
@@ -384,7 +400,7 @@ GLOBAL_ITEM* get_item(char *key) {
    return to_find;
 }
 
-void delete_item(char *key){
+void delete_item_global(char *key) {
 
    unsigned short hash_index = hash_code(key);
 
@@ -398,7 +414,7 @@ void delete_item(char *key){
 
       found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
 
-      if(found == true){
+      if (found == true) {
 
          break;
       }
@@ -407,10 +423,34 @@ void delete_item(char *key){
 
    }
 
-  to_find->fd = EMPTY;
+   to_find->fd = EMPTY;
 }
 
-bool contains(char *name){
+void display_table_global() {
+
+   int count;
+
+   for (count = 0; count < GLOBAL_TABLE_SIZE; count++) {
+      GLOBAL_ITEM *to_print = &global_table[count];
+
+      if ( to_print->fd != EMPTY) {
+
+
+         while (true) {
+            printf("File Descriptor reference : %u\n", to_print->fd);
+            printf("Reference to the data or index node: %u\n", to_print->data_index);
+            printf("Access rights: %u\n", to_print->access_rights );
+            printf("Size of the or directory file: %u\n", to_print->size);
+            printf("Reference count: %u\n", to_print->reference_count);
+            if (to_print->next == NULL) {break;}
+            to_print = to_print->next;
+         }
+
+      }
+   }
+}
+
+bool contains(char *name) {
 
    unsigned short hash_index = hash_code(name);
 
@@ -424,7 +464,7 @@ bool contains(char *name){
 
       found = strcmp(memory[to_find->fd]->content.file_desc.name, name) ? true : false;
 
-      if(found == true){
+      if (found == true) {
 
          return true;
       }
@@ -433,9 +473,89 @@ bool contains(char *name){
 
    }
 
-  return false;
+   return false;
 
 }
+
+void insert_local(char *key) {
+
+   unsigned short hash_index = hash_code(key);
+
+   int index = find_emptyLocal();
+
+   if (index != ERROR) {
+
+      local_table[index].global_ref = hash_index;
+      local_table[index].access_rights = global_table[hash_index].access_rights;
+      global_table[hash_index].reference_count++;
+
+   }
+
+}
+
+LOCAL_ITEM* get_item_local(char *key) {
+
+   unsigned short hash_index = hash_code(key);
+   int count;
+   LOCAL_ITEM *to_find = NULL;
+   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
+
+      if (local_table[count].global_ref == hash_index) {
+
+         to_find = &local_table[count];
+         break;
+      }
+   }
+
+   return to_find;
+
+}
+
+void delete_item_local(char *key) {
+
+   unsigned short hash_index = hash_code(key);
+   int count;
+
+   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
+
+      if (local_table[count].global_ref == hash_index) {
+
+         local_table[count].global_ref = EMPTY;
+         break;
+      }
+   }
+
+}
+
+int find_emptyLocal() {
+
+   int count;
+   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
+      if (local_table[count].global_ref == EMPTY) {
+         return count;
+      }
+   }
+
+   return ERROR;
+}
+
+
+void open(char *file_name) {
+// Usually there is a table of all open files, and a table of files opened by a specifc process
+
+   if (contains(file_name) == false) {
+      file_create(memory[0], file_name);
+   }
+
+   insert_global(file_name);
+   GLOBAL_ITEM *to_open_global =  get_item_global(file_name);
+   insert_local(file_name);
+}
+
+void read_file(char *file,  mode_t access_rights) {
+
+}
+
 
 
 

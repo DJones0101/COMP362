@@ -178,11 +178,23 @@ GLOBAL_ITEM global_table[GLOBAL_TABLE_SIZE];
 //hash functions   
 void create_tables();
 unsigned short hash_code(char *key);
-GLOBAL_ITEM* get_item(char *key);
-void delete_item(char *key);
-void insert(char *key);
-void display_table();
+GLOBAL_ITEM* get_item_global(char *key);
+void delete_item_global(char *key);
+void insert_global(char *key);
+void display_table_global();
+
 bool contains(char *name);
+
+LOCAL_ITEM* get_item_local(char *key);
+void delete_item_local(char *key);
+void insert_local(char *key);
+void display_table_local();
+int find_emptyLocal();
+
+void open(char *file);
+void read_file(char *file);
+void write(char *file);
+void close_file(char *file);
 
 // bool is_type( void* item);
 
