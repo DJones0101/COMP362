@@ -24,22 +24,11 @@
 #define BITVECTOR_SIZE (MAX_MEMORY/8)
 #define ERROR -1
 #define EMPTY -2
+#define READ_PERMISSION 0444
+#define WRITE_PERMISSION 0222
+#define NO_PERMISSION 0000
+#define ALL_PERMISSION 0777
 
-/*
-
-                     Access Rights
-
-Number   Octal Permission Representation                                Ref
-0        No permission                                                  ---
-1        Execute permission                                             --x
-2        Write permission                                               -w-
-3        Execute and write permission: 1 (execute) + 2 (write) = 3      -wx
-4        Read permission                                                r--
-5        Read and execute permission: 4 (read) + 1 (execute) = 5        r-x
-6        Read and write permission: 4 (read) + 2 (write) = 6            rw-
-7        All permissions: 4 (read) + 2 (write) + 1 (execute) = 7        rwx
-
-*/
 
 typedef char data_t;
 typedef unsigned short index_t;
@@ -191,10 +180,11 @@ void insert_local(char *key);
 void display_table_local();
 int find_emptyLocal();
 
-void open(char *file);
-void read_file(char *file);
-void write(char *file);
-void close_file(char *file);
+void open_file(NODE *path, char *file_name, mode_t access_rights);
+void read_file(char *file_name);
+void write_file(int where_to_write, char what_to_write[]);
+void close_file(char *file_name);
+
 
 // bool is_type( void* item);
 

@@ -115,7 +115,7 @@ void file_create(NODE *home_dir, char *name) {
    file_node->content.file_desc.last_modification = start;
    file_node->content.file_desc.last_access = start;
    file_node->content.file_desc.owner_id = getpid();
-   file_node->content.file_desc.access_rights = 0777;
+   file_node->content.file_desc.access_rights = ALL_PERMISSION;
    file_node->content.file_desc.size = 0;
    //file_node->content.file_desc.block_ref = data_index;
 
@@ -150,7 +150,7 @@ void directory_create(NODE *home_dir, char *name) {
    new_directory->content.file_desc.last_modification = start;
    new_directory->content.file_desc.last_access = start;
    new_directory->content.file_desc.owner_id = getpid();
-   new_directory->content.file_desc.access_rights = 0777;
+   new_directory->content.file_desc.access_rights = ALL_PERMISSION;
    new_directory->content.file_desc.block_ref = memory_index;
    new_directory->content.file_desc.size = 0;
 
@@ -192,7 +192,7 @@ void create_superblock() {
    SUPERBLOCK->content.file_desc.last_modification = start;
    SUPERBLOCK->content.file_desc.last_access = start;
    SUPERBLOCK->content.file_desc.owner_id = getpid();
-   SUPERBLOCK->content.file_desc.access_rights = 0000;
+   SUPERBLOCK->content.file_desc.access_rights = NO_PERMISSION;
    SUPERBLOCK->content.file_desc.block_ref = 1;
    add_to_bitvector(0); // SUPERBLOCk location in memory
    add_to_bitvector(1); // SUPERBLOCK's index node's location in memory
@@ -540,21 +540,49 @@ int find_emptyLocal() {
 }
 
 
-void open(char *file_name) {
-// Usually there is a table of all open files, and a table of files opened by a specifc process
+void open_file(NODE *path, char *file_name, mode_t access_rights) {
 
-   if (contains(file_name) == false) {
-      file_create(memory[0], file_name);
+
+   file_create(path, file_name);
+   int index = find_node(file_name);
+   NODE *new_file =  memory[index];
+   new_file->content.file_desc.access_rights = access_rights;
+}
+
+
+void read_file(char *file_name) {
+
+
+
+}
+
+void write_file(int where_to_write, char what_to_write[]) {
+
+   int file_size = memory[where_to_write]->content.file_desc.size;
+   int index = memory[where_to_write]->content.file_desc.block_ref;
+   int length = strlen(what_to_write);
+
+   int count = file_size, count2 = 0;
+
+   for(count; count < length; count++){
+
+      memory[index]->content.index[count] = what_to_write[count2];
+      count2++;
+      memory[where_to_write]->content.file_desc.size++;
+
+      if((count + count2) == DATA_SIZE ){
+         count = 0;
+
+      }
    }
 
-   insert_global(file_name);
-   GLOBAL_ITEM *to_open_global =  get_item_global(file_name);
-   insert_local(file_name);
-}
-
-void read_file(char *file,  mode_t access_rights) {
 
 }
+
+void close_file(char *file_name) {
+
+}
+
 
 
 
