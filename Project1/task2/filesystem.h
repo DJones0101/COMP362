@@ -93,7 +93,7 @@ void remove_from_bitvector(int memory_index);
 
 
 #define MAX_OPEN_PER_PROCESS 16
-#define GLOBAL_TABLE_SIZE  1000 //65521 
+#define GLOBAL_TABLE_SIZE  65521 
 
 
 struct global_node { // elements of the hash table (in-memory "directory")
@@ -122,7 +122,7 @@ struct global_item {
 };
 
 struct local_item local_table[MAX_OPEN_PER_PROCESS];
-struct global_item *global_table;
+struct global_item global_table[GLOBAL_TABLE_SIZE];
 
 
 //hash functions
@@ -144,11 +144,11 @@ int find_emptyLocal();
 
 void open_file(NODE *path, char *file_name, mode_t access_rights);
 void read_file(char *file_name);
-void write_file(char *what_to_write, char *file_name);
+void write_file(char what_to_write[], char *file_name);
 void close_file(char *file_name);
 int num_of_dataNDs(int num_of_bytes);
 void print_data(int dataNodeIndex, int num_of_content);
-void append_data(char *des, char *src);
+void append_data(char *des, char src[]);
 NODE* data_node_create(bool need_indexNd, NODE* index_node);
 
 

@@ -309,7 +309,6 @@ void create_tables() {
       local_table[count].global_ref = EMPTY;
    }
 
-   global_table = (struct global_item*)malloc(GLOBAL_TABLE_SIZE * sizeof(struct global_item*));
 }
 
 unsigned short hash_code(char *key) {
@@ -333,12 +332,12 @@ void insert_global(char *key) {
    int hash_index = hash_code(key);
    int index = find_node(key);
 
-   //printf("hash_index = %u", hash_index);
+   //printf("hash_index = %u, size of global table %d", hash_index, GLOBAL_TABLE_SIZE);
 
    struct global_node *item = (struct global_node*)malloc(sizeof(struct global_node));
-   
+
    struct global_node *list = (struct global_node*) global_table[hash_index].head;
-   
+
 
    item->fd = index;
    item->data_index = memory[index]->content.file_desc.block_ref;
@@ -442,19 +441,23 @@ void display_table_global() {
 
    int count;
 
-   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++ ) {
+   for (count = 0; count < GLOBAL_TABLE_SIZE; count++ ) {
 
       struct global_node *temp = global_table[count].head;
 
       if (temp == NULL) {
 
-         printf("global_table[%d] EMPTY\n", count);
+         //printf("global_table[%d] EMPTY\n", count);
 
       } else {
 
          while (temp != NULL) {
 
-            global_toPrint(temp);
+            printf("fd %d\n", temp->fd );
+            printf("data_index %u\n", temp->data_index);
+            printf("reference_count %u\n", temp->reference_count);
+            printf("access_rights %u\n", temp->access_rights);
+            printf("size %u\n", temp->size );
 
             temp = temp->next;
          }
@@ -530,6 +533,7 @@ int find_emptyLocal() {
 
 void open_file(NODE *path, char *file_name, mode_t access_rights) {
 
+   if (find_node(file_name) == ERROR) {return;}
 
    file_create(path, file_name);
    int index = find_node(file_name);
@@ -543,8 +547,12 @@ void open_file(NODE *path, char *file_name, mode_t access_rights) {
 
 void read_file(char *file_name) {
 
+   printf("IN READ_FILE\n");
+
    int in_mem = find_node(file_name);
    int file_size = memory[in_mem]->content.file_desc.size;
+   printf("file_size %d\n", file_size);
+   printf("int_mem %d\n", in_mem);
 
    if ( file_size < DATA_SIZE) {
 
@@ -582,14 +590,14 @@ void read_file(char *file_name) {
 
 }
 
-void write_file(char *what_to_write,  char *file_name) {
+void write_file(char what_to_write[],  char *file_name) {
 
    int file_location = find_node(file_name);
 
    if (memory[file_location]->content.file_desc.access_rights == READ_PERMISSION) {return;}
 
    int in_mem = find_node(file_name);
-   int file_size = memory[in_mem]->content.file_desc.size;
+   int file_size = memory[in_mem]->content.file_desc.size + strlen(what_to_write);
 
    if ( file_size < DATA_SIZE) {
 
@@ -616,19 +624,17 @@ void write_file(char *what_to_write,  char *file_name) {
       int count;
 
       NODE *index_node = malloc(sizeof(NODE));
-      int index =  get_free_index();
+      int index = get_free_index();
       add_to_bitvector(index);
       memory[index] = index_node;
       NODE *data_node;
       data_node = data_node_create(true, index_node);
 
-
-
-
       for (count = 0; count < num_of_content; count++) {
 
 
-         append_data(data_node->content.data, &what_to_write[count]);
+         data_node->content.data[num_of_content + count] = what_to_write[count];
+         printf(" what to what_to_write %c\n", what_to_write[count] );
          tracker++;
          if (tracker == DATA_SIZE) {
             tracker = 0;
@@ -642,7 +648,7 @@ void write_file(char *what_to_write,  char *file_name) {
    }
 
 
-
+   memory[in_mem]->content.file_desc.size++;
 
 }
 
@@ -683,11 +689,15 @@ int num_of_dataNDs( int num_of_bytes) {
 }
 
 void print_data(int dataNodeIndex, int num_of_content) {
+   printf("IN print data\n");
+   printf("dataNodeIndex %d num_of_content %d \n", dataNodeIndex, num_of_content );
    int count;
    for (count = 0; count < num_of_content; count++ ) {
+      printf("count :%d\n", count);
       printf("%c ", memory[dataNodeIndex]->content.data[count]);
    }
    printf("\n");
+   printf("OUT print data\n");
 }
 
 void append_data(char *des, char *src) {
