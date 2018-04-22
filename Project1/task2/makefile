@@ -8,6 +8,7 @@ all: filesystem.c
 
 clean: 
 	$(RM) filesystem
+	$(RM) core
 
 run: filesystem
 	./filesystem 

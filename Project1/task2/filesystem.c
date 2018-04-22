@@ -13,6 +13,7 @@ int numOfEntries_local = 0;
 void file_system_create() {
    allocate();
    create_superblock();
+   create_tables();
 }
 
 
@@ -303,13 +304,12 @@ void free_system() {
 
 void create_tables() {
    int count;
-   for (count = 0; count < GLOBAL_TABLE_SIZE; count++) {
-      global_table[count].fd = EMPTY;
-   }
 
    for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
       local_table[count].global_ref = EMPTY;
    }
+
+   global_table = (struct global_item*)malloc(GLOBAL_TABLE_SIZE * sizeof(struct global_item*));
 }
 
 unsigned short hash_code(char *key) {
@@ -330,174 +330,162 @@ unsigned short hash_code(char *key) {
 
 void insert_global(char *key) {
 
-   unsigned short hash_index = hash_code(key);
-   unsigned short index_inMem = find_node(key);
-   NODE *file_desc_ND = memory[index_inMem];
+   int hash_index = hash_code(key);
+   int index = find_node(key);
+
+   //printf("hash_index = %u", hash_index);
+
+   struct global_node *item = (struct global_node*)malloc(sizeof(struct global_node));
+   
+   struct global_node *list = (struct global_node*) global_table[hash_index].head;
+   
+
+   item->fd = index;
+   item->data_index = memory[index]->content.file_desc.block_ref;
+   item->reference_count++;
+   item->access_rights = memory[index]->content.file_desc.access_rights;
+   item->size = memory[index]->content.file_desc.size;
 
 
 
-   if ( global_table[hash_index].fd == EMPTY) {
+   if (list == NULL) {
 
-      global_table[hash_index].fd = index_inMem;
-      global_table[hash_index].data_index = file_desc_ND->content.file_desc.block_ref;
-      global_table[hash_index].access_rights = file_desc_ND->content.file_desc.access_rights;
-      global_table[hash_index].size = file_desc_ND->content.file_desc.size;
-      global_table[hash_index].reference_count = 0;
-      global_table[hash_index].next = NULL;
+      global_table[hash_index].head = item;
+      global_table[hash_index].tail = item;
+      numOfEntries_global++;
 
+   } else {
+      int find = find_item(global_table[hash_index].head, key);
 
-   } else if (global_table[hash_index].fd != EMPTY) {
+      if (find == ERROR) {
 
-      GLOBAL_ITEM *to_insert = &global_table[hash_index];
-      bool inserted = false;
+         global_table[hash_index].tail->next = item;
+         global_table[hash_index].tail = item;
+         numOfEntries_global++;
 
-      while (inserted == false) {
-
-         if (to_insert->fd == EMPTY) {
-
-            to_insert->fd = index_inMem;
-            to_insert->data_index = file_desc_ND->content.file_desc.block_ref;
-            to_insert->access_rights = file_desc_ND->content.file_desc.access_rights;
-            to_insert->size = file_desc_ND->content.file_desc.size;
-            to_insert->reference_count = 0;
-            to_insert->next = NULL;
-            inserted = true;
-
-         }
-
-         to_insert = to_insert->next;
       }
-
-
-
    }
+
 
 }
 
-GLOBAL_ITEM* get_item_global(char *key) {
-
-   unsigned short hash_index = hash_code(key);
-
-   GLOBAL_ITEM* to_find = &global_table[hash_index];
-   bool found;
-   int count = 0;
 
 
-   while (count <= GLOBAL_TABLE_SIZE) {
+struct global_node* get_item_global(char *key) {
+
+   int hash_index = hash_code(key);
+
+   struct global_node *list = (struct global_node*) global_table[hash_index].head;
 
 
-      found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
 
-      if (found == true) {
+   while (list != NULL) {
 
-         break;
+      if (list->fd == find_node(key)) {
+         return list;
       }
 
-      to_find = to_find->next;
-
+      list = list->next;
    }
 
-   return to_find;
+   return NULL;
+
 }
 
 void delete_item_global(char *key) {
 
-   unsigned short hash_index = hash_code(key);
+   int hash_index = hash_code(key);
 
-   GLOBAL_ITEM* to_find = &global_table[hash_index];
-   bool found;
-   int count = 0;
+   struct global_node *list = (struct global_node*) global_table[hash_index].head;
 
+   if (list == NULL) {
 
-   while (count <= GLOBAL_TABLE_SIZE) {
+      return;
 
+   } else {
 
-      found = strcmp(memory[to_find->fd]->content.file_desc.name, key) ? true : false;
+      int find = find_item(list, key);
 
-      if (found == true) {
+      if (find == ERROR) {
 
-         break;
+         return;
+
+      } else {
+
+         struct global_node *temp = list;
+
+         if (temp->fd == find_node(key)) {
+
+            global_table[hash_index].head = temp->next;
+            return;
+         }
+
+         while (temp->next->fd != find_node(key)) {
+
+            temp = temp->next;
+         }
+
+         if (global_table[hash_index].tail == temp->next) {
+
+            temp->next = NULL;
+            global_table[hash_index].tail = temp;
+
+         } else {
+
+            temp->next = temp->next->next;
+         }
       }
-
-      to_find = to_find->next;
-
    }
-
-   to_find->fd = EMPTY;
 }
 
 void display_table_global() {
 
    int count;
 
-   for (count = 0; count < GLOBAL_TABLE_SIZE; count++) {
-      GLOBAL_ITEM *to_print = &global_table[count];
+   for (count = 0; count < MAX_OPEN_PER_PROCESS; count++ ) {
 
-      if ( to_print->fd != EMPTY) {
+      struct global_node *temp = global_table[count].head;
 
+      if (temp == NULL) {
 
-         while (true) {
-            printf("File Descriptor reference : %u\n", to_print->fd);
-            printf("Reference to the data or index node: %u\n", to_print->data_index);
-            printf("Access rights: %u\n", to_print->access_rights );
-            printf("Size of the or directory file: %u\n", to_print->size);
-            printf("Reference count: %u\n", to_print->reference_count);
-            if (to_print->next == NULL) {break;}
-            to_print = to_print->next;
+         printf("global_table[%d] EMPTY\n", count);
+
+      } else {
+
+         while (temp != NULL) {
+
+            global_toPrint(temp);
+
+            temp = temp->next;
          }
-
+         printf("\n");
       }
    }
-}
-
-bool contains(char *name) {
-
-   unsigned short hash_index = hash_code(name);
-
-   GLOBAL_ITEM* to_find = &global_table[hash_index];
-   bool found;
-   int count = 0;
-
-
-   while (count <= GLOBAL_TABLE_SIZE) {
-
-
-      found = strcmp(memory[to_find->fd]->content.file_desc.name, name) ? true : false;
-
-      if (found == true) {
-
-         return true;
-      }
-
-      to_find = to_find->next;
-
-   }
-
-   return false;
 
 }
+
+
 
 void insert_local(char *key) {
 
-   unsigned short hash_index = hash_code(key);
+
+   struct global_node *list = get_item_global(key);
 
    int index = find_emptyLocal();
 
    if (index != ERROR) {
-
-      local_table[index].global_ref = hash_index;
-      local_table[index].access_rights = global_table[hash_index].access_rights;
-      global_table[hash_index].reference_count++;
+      local_table[index].global_ref = list->access_rights;
+      local_table[index].access_rights = list->fd;
 
    }
 
 }
 
-LOCAL_ITEM* get_item_local(char *key) {
+struct local_item* get_item_local(char *key) {
 
-   unsigned short hash_index = hash_code(key);
+   int hash_index = hash_code(key);
    int count;
-   LOCAL_ITEM *to_find = NULL;
+   struct local_item *to_find = NULL;
    for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
 
       if (local_table[count].global_ref == hash_index) {
@@ -513,7 +501,7 @@ LOCAL_ITEM* get_item_local(char *key) {
 
 void delete_item_local(char *key) {
 
-   unsigned short hash_index = hash_code(key);
+   int hash_index = hash_code(key);
    int count;
 
    for (count = 0; count < MAX_OPEN_PER_PROCESS; count++) {
@@ -547,46 +535,204 @@ void open_file(NODE *path, char *file_name, mode_t access_rights) {
    int index = find_node(file_name);
    NODE *new_file =  memory[index];
    new_file->content.file_desc.access_rights = access_rights;
+
+   insert_global(file_name);
+   insert_local(file_name);
 }
 
 
 void read_file(char *file_name) {
 
+   int in_mem = find_node(file_name);
+   int file_size = memory[in_mem]->content.file_desc.size;
 
+   if ( file_size < DATA_SIZE) {
+
+      int num_of_content = memory[in_mem]->content.file_desc.size;
+      int dataNodeIndex = memory[in_mem]->content.file_desc.block_ref;
+      print_data(dataNodeIndex, num_of_content);
+
+   } else {
+
+
+      int num_of_content = memory[in_mem]->content.file_desc.size;
+      int index_node = memory[in_mem]->content.file_desc.block_ref;
+      int numOfnodes = num_of_dataNDs(file_size);
+
+
+      int count;
+
+      for (count = 0; count < numOfnodes; count++) {
+
+
+         if (num_of_content > DATA_SIZE) {
+
+            print_data(memory[index_node]->content.index[count], DATA_SIZE);
+            num_of_content -= DATA_SIZE;
+
+         } else if (num_of_content < DATA_SIZE) {
+
+            print_data(memory[index_node]->content.index[count], num_of_content);
+
+         }
+
+      }
+
+   }
 
 }
 
-void write_file(int where_to_write, char what_to_write[]) {
+void write_file(char *what_to_write,  char *file_name) {
 
-   int file_size = memory[where_to_write]->content.file_desc.size;
-   int index = memory[where_to_write]->content.file_desc.block_ref;
-   int length = strlen(what_to_write);
+   int file_location = find_node(file_name);
 
-   int count = file_size, count2 = 0;
+   if (memory[file_location]->content.file_desc.access_rights == READ_PERMISSION) {return;}
 
-   for(count; count < length; count++){
+   int in_mem = find_node(file_name);
+   int file_size = memory[in_mem]->content.file_desc.size;
 
-      memory[index]->content.index[count] = what_to_write[count2];
-      count2++;
-      memory[where_to_write]->content.file_desc.size++;
+   if ( file_size < DATA_SIZE) {
 
-      if((count + count2) == DATA_SIZE ){
-         count = 0;
+
+      NODE *data_node = data_node_create(false, NULL);
+
+
+      if (file_size == 0) {
+
+         strcpy(data_node->content.data, what_to_write);
+
+      } else if ( file_size > 0) {
+
+         append_data(data_node->content.data, what_to_write);
+      }
+
+
+   } else if (file_size > DATA_SIZE) {
+
+
+      //int numOfnodes = num_of_dataNDs(file_size);
+      int num_of_content = strlen(what_to_write);
+      int tracker = 0;
+      int count;
+
+      NODE *index_node = malloc(sizeof(NODE));
+      int index =  get_free_index();
+      add_to_bitvector(index);
+      memory[index] = index_node;
+      NODE *data_node;
+      data_node = data_node_create(true, index_node);
+
+
+
+
+      for (count = 0; count < num_of_content; count++) {
+
+
+         append_data(data_node->content.data, &what_to_write[count]);
+         tracker++;
+         if (tracker == DATA_SIZE) {
+            tracker = 0;
+            data_node = data_node_create(true, index_node);
+         }
+
 
       }
+
+
    }
+
+
 
 
 }
 
 void close_file(char *file_name) {
 
+   struct global_node *list = get_item_global(file_name);
+
+   unsigned short reference_count = list->reference_count;
+
+   if (reference_count > 0) {
+      return;
+
+   } else {
+
+      delete_item_local(file_name);
+      delete_item_global(file_name);
+   }
+
+
+
 }
 
 
+int num_of_dataNDs( int num_of_bytes) {
 
+   int retVal;
 
+   if ( (num_of_bytes % DATA_SIZE) == 0 ) {
 
+      retVal = num_of_bytes / DATA_SIZE;
 
+   } else {
 
+      retVal = (num_of_bytes / DATA_SIZE) + 1;
+   }
 
+   return retVal;
+}
+
+void print_data(int dataNodeIndex, int num_of_content) {
+   int count;
+   for (count = 0; count < num_of_content; count++ ) {
+      printf("%c ", memory[dataNodeIndex]->content.data[count]);
+   }
+   printf("\n");
+}
+
+void append_data(char *des, char *src) {
+
+   strcat(des, src);
+}
+
+NODE* data_node_create(bool need_indexNd, NODE* index_node) {
+
+   int dataIndex = get_free_index();
+   NODE *data_node = malloc(sizeof(NODE));
+   data_node = memory[dataIndex];
+   add_to_bitvector(dataIndex);
+
+   if (need_indexNd == true) {
+      assign_to_index_node(index_node, dataIndex);
+   }
+
+   return data_node;
+}
+
+int find_item(struct global_node *list, char *key) {
+   int retVal = 0;
+
+   struct global_node *temp = list;
+
+   while (temp != NULL) {
+
+      if (temp->fd == find_node(key)) {
+
+         return retVal;
+      }
+
+      temp = temp->next;
+      retVal++;
+
+   }
+
+   return ERROR;
+}
+
+void global_toPrint(struct global_node *node) {
+   printf("fd %d\n", node->fd );
+   printf("data_index %u\n", node->data_index);
+   printf("reference_count %u\n", node->reference_count);
+   printf("access_rights %u\n", node->access_rights);
+   printf("size %u\n", node->size );
+}
