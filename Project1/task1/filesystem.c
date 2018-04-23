@@ -220,10 +220,13 @@ int find_node(char *name) {
 
    for (count = 2; count < MAX_MEMORY; count++) {
 
+      if(memory[count]->type == DIR_ND || memory[count]->type == FILE_ND){
+
       bool found = (strcmp(memory[count]->content.file_desc.name, name) == 0) ? true : false;
       if (found == true) {
          return count;
       }
+   }
 
    }
 

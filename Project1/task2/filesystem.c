@@ -547,57 +547,29 @@ void open_file(NODE *path, char *file_name, mode_t access_rights) {
 
 void read_file(char *file_name) {
 
-   printf("IN READ_FILE\n");
+   int file_location = find_node(file_name);
 
-   int in_mem = find_node(file_name);
-   int file_size = memory[in_mem]->content.file_desc.size;
-   printf("file_size %d\n", file_size);
-   printf("int_mem %d\n", in_mem);
+   if (memory[file_location]->content.file_desc.access_rights == READ_PERMISSION) {return;}
 
-   if ( file_size < DATA_SIZE) {
+   if(memory[file_location]->content.file_desc.size < DATA_SIZE){
 
-      int num_of_content = memory[in_mem]->content.file_desc.size;
-      int dataNodeIndex = memory[in_mem]->content.file_desc.block_ref;
-      print_data(dataNodeIndex, num_of_content);
+      int data_location = memory[file_location]->content.file_desc.block_ref;
 
-   } else {
-
-
-      int num_of_content = memory[in_mem]->content.file_desc.size;
-      int index_node = memory[in_mem]->content.file_desc.block_ref;
-      int numOfnodes = num_of_dataNDs(file_size);
-
-
-      int count;
-
-      for (count = 0; count < numOfnodes; count++) {
-
-
-         if (num_of_content > DATA_SIZE) {
-
-            print_data(memory[index_node]->content.index[count], DATA_SIZE);
-            num_of_content -= DATA_SIZE;
-
-         } else if (num_of_content < DATA_SIZE) {
-
-            print_data(memory[index_node]->content.index[count], num_of_content);
-
-         }
-
-      }
-
+      print_data(data_location, memory[file_location]->content.file_desc.size);
    }
+
+   
 
 }
 
 void write_file(char what_to_write[],  char *file_name) {
 
    int file_location = find_node(file_name);
+   //printf("file_location %d\n", file_location);
 
    if (memory[file_location]->content.file_desc.access_rights == READ_PERMISSION) {return;}
 
-   int in_mem = find_node(file_name);
-   int file_size = memory[in_mem]->content.file_desc.size + strlen(what_to_write);
+   int file_size = memory[file_location]->content.file_desc.size + strlen(what_to_write);
 
    if ( file_size < DATA_SIZE) {
 
@@ -634,7 +606,7 @@ void write_file(char what_to_write[],  char *file_name) {
 
 
          data_node->content.data[num_of_content + count] = what_to_write[count];
-         printf(" what to what_to_write %c\n", what_to_write[count] );
+        // printf(" what to what_to_write %c\n", what_to_write[count] );
          tracker++;
          if (tracker == DATA_SIZE) {
             tracker = 0;
@@ -647,8 +619,8 @@ void write_file(char what_to_write[],  char *file_name) {
 
    }
 
-
-   memory[in_mem]->content.file_desc.size++;
+  // print_data(6,11);
+   memory[file_location]->content.file_desc.size++;
 
 }
 
@@ -664,10 +636,10 @@ void close_file(char *file_name) {
    } else {
 
       delete_item_local(file_name);
-      delete_item_global(file_name);
+      
    }
 
-
+   delete_item_global(file_name);
 
 }
 
@@ -689,15 +661,15 @@ int num_of_dataNDs( int num_of_bytes) {
 }
 
 void print_data(int dataNodeIndex, int num_of_content) {
-   printf("IN print data\n");
-   printf("dataNodeIndex %d num_of_content %d \n", dataNodeIndex, num_of_content );
+  // printf("IN print data\n");
+  // printf("dataNodeIndex %d num_of_content %d \n", dataNodeIndex, num_of_content );
    int count;
    for (count = 0; count < num_of_content; count++ ) {
-      printf("count :%d\n", count);
-      printf("%c ", memory[dataNodeIndex]->content.data[count]);
+     // printf("%d", count);
+      printf("%c", memory[dataNodeIndex]->content.data[count]);
    }
    printf("\n");
-   printf("OUT print data\n");
+  // printf("OUT print data\n");
 }
 
 void append_data(char *des, char *src) {
@@ -715,6 +687,8 @@ NODE* data_node_create(bool need_indexNd, NODE* index_node) {
    if (need_indexNd == true) {
       assign_to_index_node(index_node, dataIndex);
    }
+
+   printf("DATA node created a memm location %d\n",dataIndex );
 
    return data_node;
 }
