@@ -29,6 +29,9 @@
 #define NO_PERMISSION 0000
 #define ALL_PERMISSION 0777
 
+int numOfEntries_global;
+int numOfEntries_local;
+
 
 
 typedef char data_t;

@@ -6,8 +6,8 @@
 
 #include "filesystem.h"
 
-int numOfEntries_global = 0;
-int numOfEntries_local = 0;
+//int numOfEntries_global = 0;
+//int numOfEntries_local = 0;
 
 
 void file_system_create() {
