@@ -9,31 +9,19 @@
 int main(int argc, char *argv[]) {
 
 	file_system_create();
-	printf("-----------------created the filesystem\n");
-	file_create(memory[0],"fio");
-	display_bitvector();
 	
-	printf("Global table : %d\n", numOfEntries_global);
-	printf("-----------------opened the file wrote to it and read it\n");
+	file_create(memory[0], "file");
+	open_file(memory[0], "file", WRITE_PERMISSION);
+	write_file("HELLO WORLD",  "file");
+	close_file("file");
+	open_file(memory[0], "file", READ_PERMISSION);
 
-	open_file(memory[0],"fio",WRITE_PERMISSION);
-	write_file("HELLO WORLD", "fio");
-	close_file("fio");
-
-	//display_bitvector();
-	printf("Global table : %d\n", numOfEntries_global);
-	open_file(memory[0],"fio",READ_PERMISSION);
-	read_file("fio");
+	char *test = malloc(11);
+	strcpy(test, read_file("file"));
+	printf("%s\n",test);
 
 
-	printf("-----------------closed the file\n");
-
-	close_file("fio");
-	printf("Global table : %d\n", numOfEntries_global);
-	
-
-
-
+		
 	free_system();
 	return 0;
 }

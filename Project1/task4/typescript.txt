@@ -1,0 +1,26 @@
+/*
+* Darius Jones
+* Project 1 task 4
+* 4/15/2018
+*/
+
+darius@dj:~/Desktop/COMP362/Project1/task4$ gcc -Wall -o hello hello.c `pkg-config fuse --cflags --libs`
+darius@dj:~/Desktop/COMP362/Project1/task4$ ./hello tmp/
+fuse: mountpoint is not empty
+fuse: if you are sure this is safe, use the 'nonempty' mount option
+darius@dj:~/Desktop/COMP362/Project1/task4$ ls tmp
+fourth  hello  second  third
+darius@dj:~/Desktop/COMP362/Project1/task4$ cat tmp/hello Hello World!
+Hello World!
+cat: Hello: No such file or directory
+cat: 'World!': No such file or directory
+darius@dj:~/Desktop/COMP362/Project1/task4$ cat tmp/hello
+Hello World!
+darius@dj:~/Desktop/COMP362/Project1/task4$ cat tmp/second
+second file
+darius@dj:~/Desktop/COMP362/Project1/task4$ cat tmp/third
+cat: tmp/third: Permission denied
+darius@dj:~/Desktop/COMP362/Project1/task4$ cat tmp/fourth
+WL
+BHCDARZOW
+darius@dj:~/Desktop/COMP362/Project1/task4$ 

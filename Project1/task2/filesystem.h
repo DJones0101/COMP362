@@ -146,8 +146,8 @@ void display_table_local();
 int find_emptyLocal();
 
 void open_file(NODE *path, char *file_name, mode_t access_rights);
-void read_file(char *file_name);
-void write_file(char what_to_write[], char *file_name);
+char* read_file(char *file_name);
+void write_file(char *what_to_write,  char *file_name);
 void close_file(char *file_name);
 int num_of_dataNDs(int num_of_bytes);
 void print_data(int dataNodeIndex, int num_of_content);

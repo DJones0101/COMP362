@@ -1,0 +1,37 @@
+/*
+* Darius Jones
+* Project 1 task 3
+* 4/15/2018
+*/
+
+darius@dj:~/Desktop/COMP362/Project1/task3$ $ gcc -Wall `pkg-config fuse --cflags --libs` hello.c -o hello
+$: command not found
+darius@dj:~/Desktop/COMP362/Project1/task3$ 
+darius@dj:~/Desktop/COMP362/Project1/task3$ pkg-config fuse --cflags --libs
+-I/usr/include/fuse -D_FILE_OFFSET_BITS=64 -lfuse -pthread  
+darius@dj:~/Desktop/COMP362/Project1/task3$ mkdir tmp $./hello tmp/ $
+mkdir: cannot create directory ‘tmp’: File exists
+mkdir: cannot create directory ‘$./hello’: No such file or directory
+mkdir: cannot create directory ‘tmp/’: File exists
+mkdir: cannot create directory ‘$’: File exists
+darius@dj:~/Desktop/COMP362/Project1/task3$ mkdir tmp 
+mkdir: cannot create directory ‘tmp’: File exists
+darius@dj:~/Desktop/COMP362/Project1/task3$ rm tmp
+rm: cannot remove 'tmp': Is a directory
+darius@dj:~/Desktop/COMP362/Project1/task3$ mkdir tmp 
+darius@dj:~/Desktop/COMP362/Project1/task3$ ./hello tmp/
+darius@dj:~/Desktop/COMP362/Project1/task3$ ls tmp/
+hello
+darius@dj:~/Desktop/COMP362/Project1/task3$ ./hello tmp/
+fuse: mountpoint is not empty
+fuse: if you are sure this is safe, use the 'nonempty' mount option
+darius@dj:~/Desktop/COMP362/Project1/task3$ ls tmp/ hello
+hello
+
+tmp/:
+hello
+darius@dj:~/Desktop/COMP362/Project1/task3$ cat tmp/hello Hello World!
+Hello World!
+cat: Hello: No such file or directory
+cat: 'World!': No such file or directory
+darius@dj:~/Desktop/COMP362/Project1/task3$ 
