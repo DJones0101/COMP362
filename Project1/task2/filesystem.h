@@ -79,6 +79,8 @@ void assign_to_index_node(NODE *index_node, int memory_index);
 void directoryIndex_add(NODE *home_dir, int index);
 void free_system();
 int find_index_slot(NODE *index_nd, int memory_location);
+int create_data_ND();
+int create_index_ND();
 
 
 
@@ -145,8 +147,8 @@ void insert_local(char *key);
 void display_table_local();
 int find_emptyLocal();
 
-void open_file(NODE *path, char *file_name, mode_t access_rights);
-char* read_file(char *file_name);
+void open_file(NODE *path, char *file_name);
+void read_file(char *file_name, char buffer[]);
 void write_file(char *what_to_write,  char *file_name);
 void close_file(char *file_name);
 int num_of_dataNDs(int num_of_bytes);

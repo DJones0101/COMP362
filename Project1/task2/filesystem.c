@@ -301,6 +301,23 @@ void free_system() {
 
 }
 
+int create_data_ND() {
+
+   int index_data = get_free_index();
+   memory[index_data] = malloc(sizeof(NODE));
+   add_to_bitvector(index_data);
+   return index_data;
+
+}
+
+
+int create_index_ND() {
+
+   int index_index = get_free_index();
+   memory[index_index] = malloc(sizeof(NODE));
+   return index_index;
+}
+
 //--------------------------------Task 2--------------------------------------------------------------------
 
 void create_tables() {
@@ -491,7 +508,7 @@ int find_emptyLocal() {
 }
 
 
-void open_file(NODE *path, char *file_name, mode_t access_rights) {
+void open_file(NODE *path, char *file_name/*, mode_t access_rights*/) {
 
    if (find_node(file_name) == ERROR) {
       return;
@@ -503,12 +520,9 @@ void open_file(NODE *path, char *file_name, mode_t access_rights) {
 }
 
 
-char* read_file(char *file_name) {
+void read_file(char *file_name, char buffer[]) {
 
    int index = find_node(file_name);
-
-   char *to_return;
-   to_return = malloc(sizeof(memory[index]->content.file_desc.size));
 
    int size = memory[index]->content.file_desc.size;
 
@@ -516,8 +530,8 @@ char* read_file(char *file_name) {
 
       int index_data = memory[index]->content.file_desc.block_ref;
 
-      strcpy(to_return, memory[index_data]->content.data);
-     
+      strcpy(buffer,memory[index_data]->content.data);
+
 
    } else {
 
@@ -525,72 +539,73 @@ char* read_file(char *file_name) {
       NODE *index = memory[index_index];
       int index_data = index->content.index[0];
       NODE* data = memory[index_data];
-      strcpy(to_return, data->content.data);
+      strcpy(buffer, data->content.data);
 
       int num_of_data_nodes = (size / DATA_SIZE) + 1;
       int count;
-      for (count = 1; count < num_of_data_nodes; count++) {
+      for (count = 0; count < num_of_data_nodes; count++) {
 
          index_data = index->content.index[0];
          data = memory[index_data];
-         strcat(to_return, data->content.data);
+         strcat(buffer, data->content.data);
       }
 
 
    }
-
-   return to_return;
-
-
 }
 
 void write_file(char *what_to_write,  char *file_name) {
 
 
    int index_file = find_node(file_name);
-   NODE* file = malloc(sizeof(NODE));
-   memory[index_file] = file;
+   NODE* file;
+   file = memory[index_file];
+
    file->content.file_desc.size += strlen(what_to_write);
 
 
 
    if (file->content.file_desc.size < DATA_SIZE) {
 
-      NODE* data = malloc(sizeof(NODE));
-      int index_data = get_free_index();
+      int data_index = create_data_ND();
+      NODE* data = memory[data_index];
 
 
       strcpy(data->content.data, what_to_write);
 
-      memory[index_data] = data;
+      int size = strlen(what_to_write);
+      data->content.data[size + 1] = '\0';
+
+      data = memory[data_index];
 
 
 
    } else {
 
-      int num_of_data_nodes = (strlen(what_to_write) / 254) + 1;
-
+      int num_of_data_nodes = (strlen(what_to_write) / DATA_SIZE) + 1;
       int count;
-      int index_index = get_free_index();
-      NODE* index = malloc(sizeof(NODE));
+
+      int index_index = create_index_ND();
+      NODE* index = memory[index_index];
 
       for (count = 0; count < num_of_data_nodes; count++) {
 
-         NODE* data = malloc(sizeof(NODE));
 
-         int index_data = get_free_index();
+
+         int data_index = create_data_ND();
+         NODE* data = memory[data_index];
 
          strncpy(data->content.data, what_to_write + (count * DATA_SIZE), DATA_SIZE);
 
-         memory[index_data] = data;
+         memory[data_index] = data;
 
-         index->content.index[count] = index_data;
+         index->content.index[count] = data_index;
 
       }
 
 
 
-      memory[index_index] = index;
+      
 
 
    }
@@ -601,20 +616,8 @@ void write_file(char *what_to_write,  char *file_name) {
 
 void close_file(char *file_name) {
 
-   //struct global_node *list = get_item_global(file_name);
-
-   //unsigned short reference_count = list->reference_count;
-
-   /*if (reference_count > 0) {
-      return;
-
-   } else {
-
-      delete_item_local(file_name);
-
-   }*/
-
    delete_item_global(file_name);
+   delete_item_local(file_name);
 
 }
 
