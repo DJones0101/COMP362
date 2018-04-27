@@ -4,14 +4,19 @@
 * 4/26/2018
 */
 
-#ifndef _DISK_H_
-#define _DISH_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifndef _disk_h_ 
+#define _disk_h_
 #define SECT_SIZE 128
 #define NUM_OF_SECTS 32
 #define NUM_OF_CYLS 16
 #define NUM_OF_HEADS 10
-#define MAX_LOGICAL_SECTOR 5120 // NUM_OF_HEADS * NUM_OF_CYLS * 
-#define IN_RANGE 0
+#define MAX_LOGICAL_SECTOR 5120 
+#define VALID 0
+#define INVALID 1
 
 
 
@@ -20,13 +25,13 @@ typedef sector_t cylinder_t[NUM_OF_SECTS];
 typedef cylinder_t head_t[NUM_OF_CYLS];
 typedef head_t disk_t[NUM_OF_HEADS];
 
-typedef struct {
+typedef struct phys_addr {
 	int head;
 	int cyl;
 	int sect;
 } physical_address;
 
-// declare disk .. ect. head_t Platter[]
+char *disk[NUM_OF_HEADS * NUM_OF_CYLS * NUM_OF_SECTS * SECT_SIZE];
 
 /**This function translates a logical to a physical address.
 https://en.wikipedia.org/wiki/Logical_block_addressing**/
@@ -45,4 +50,4 @@ starting at sector pointed to by logical_block_num. Here, you also should
 validate the parameters.**/
 int write(int logical_block_num, int num_of_sectors, void *buffer);
 
-#endif _DISK_H_
+#endif 
