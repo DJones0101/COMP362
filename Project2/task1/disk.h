@@ -50,4 +50,7 @@ starting at sector pointed to by logical_block_num. Here, you also should
 validate the parameters.**/
 int write(int logical_block_num, int num_of_sectors, void *buffer);
 
+void convert_test();
+void read_write_test();
+
 #endif 
