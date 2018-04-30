@@ -1,0 +1,61 @@
+/*
+* Darius Jones
+* Project 2 task 1
+* 4/26/2018
+*/
+
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task1$ make
+gcc -g -Wall *.c disk.h -o disk -lm
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task1$ make run
+./disk
+	:::::Conversion test:::::
+Random logical address: 1383
+From logical address (1383)  to physical  (c: 4, h: 3, s: 8)
+Physical to logical address: 1383
+Pass
+	:::::Read/Write test:::::
+Random string generated "lrbbmqbhcdarzo". Wrote string to address 966 
+Reading "lrbbmqbhcdarzo" from address 966.
+Pass
+---------------------------------------------------------------------------------
+	:::::Conversion test:::::
+Random logical address: 4220
+From logical address (4220)  to physical  (c: 13, h: 1, s: 29)
+Physical to logical address: 4220
+Pass
+	:::::Read/Write test:::::
+Random string generated "kyhiddqscdxrjm". Wrote string to address 706 
+Reading "kyhiddqscdxrjm" from address 706.
+Pass
+---------------------------------------------------------------------------------
+	:::::Conversion test:::::
+Random logical address: 3942
+From logical address (3942)  to physical  (c: 12, h: 3, s: 7)
+Physical to logical address: 3942
+Pass
+	:::::Read/Write test:::::
+Random string generated "frxsjybldbefsa". Wrote string to address 3378 
+Reading "frxsjybldbefsa" from address 3378.
+Pass
+---------------------------------------------------------------------------------
+	:::::Conversion test:::::
+Random logical address: 2475
+From logical address (2475)  to physical  (c: 7, h: 7, s: 12)
+Physical to logical address: 2475
+Pass
+	:::::Read/Write test:::::
+Random string generated "bynecdyggxxpkl". Wrote string to address 3250 
+Reading "bynecdyggxxpkl" from address 3250.
+Pass
+---------------------------------------------------------------------------------
+	:::::Conversion test:::::
+Random logical address: 3696
+From logical address (3696)  to physical  (c: 11, h: 5, s: 17)
+Physical to logical address: 3696
+Pass
+	:::::Read/Write test:::::
+Random string generated "ellnmpapqfwkho". Wrote string to address 4585 
+Reading "ellnmpapqfwkho" from address 4585.
+Pass
+---------------------------------------------------------------------------------
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task1$ 
