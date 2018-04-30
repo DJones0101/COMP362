@@ -18,8 +18,11 @@ int log_to_phys(int logical_address, physical_address *phys_address) {
 	phys_address->head = (logical_address / NUM_OF_SECTS) % NUM_OF_HEADS ;
 	phys_address->sect = (logical_address % NUM_OF_SECTS) + 1;
 
-	// valid range 0 to MAX_LOGICAL_SECTOR
-	return ((logical_address >= 0 ) && (logical_address <= MAX_LOGICAL_SECTOR)) ?  VALID : INVALID;
+	if ((phys_address->cyl <= NUM_OF_CYLS) && (phys_address->head <= NUM_OF_HEADS) && (phys_address->sect <= NUM_OF_SECTS)) {
+		return VALID;
+	}
+
+	return INVALID;
 
 }
 
@@ -32,76 +35,113 @@ int phys_to_log(physical_address *phys_address) {
 
 int read(int logical_block_num, int num_of_blocks, void **buffer) {
 
-	physical_address *phys_address = malloc(sizeof(physical_address));
-	int is_valid = log_to_phys(logical_block_num, phys_address);
+	if (is_valid(logical_block_num, num_of_blocks) == true) {
+		physical_address phaddr;
+		log_to_phys(logical_block_num, &phaddr);
+		int count;
+		
+		for (count = 0; count < num_of_blocks; count++) {
+			strcpy(((char *)buffer),&(disk[count][phaddr.cyl][phaddr.head][phaddr.sect]));
+		}
+		return 0;
 
-	if (is_valid == VALID) {
-		memcpy(*buffer, disk[(phys_address->cyl) * (phys_address->head) * (phys_address->sect)], num_of_blocks);
+
 	}
 
-	return is_valid;
+	return -1;
 }
 
 int write(int logical_block_num, int num_of_sectors, void *buffer) {
 
-	physical_address *phys_address = malloc(sizeof(physical_address));
-	int is_valid = log_to_phys(logical_block_num, phys_address);
+	if (is_valid(logical_block_num, num_of_sectors) == true) {
 
-	if (is_valid == VALID) {
-		memcpy(disk[(phys_address->cyl) * (phys_address->head) + (phys_address->sect)], buffer , num_of_sectors);
-	}
+		physical_address phaddr;
 
-	return is_valid;
-
-}
-
-void convert_test() {
-	int count;
-	for (count = 0; count < 4; count++) {
-		int logical_address = rand() % MAX_LOGICAL_SECTOR;
-		printf("logical address : %d\n", logical_address);
-
-		physical_address *phys = malloc(sizeof(physical_address));
-		if (log_to_phys(logical_address, phys) == VALID) {
-			printf("logical to physical address: (%d, %d, %d)\n", phys->head, phys->cyl, phys->sect);
-		} else {
-			printf("Error: log_to_phys\n");
+		log_to_phys(logical_block_num, &phaddr);
+		char *value = malloc(sizeof((char*)buffer));
+		strcpy(value, buffer);
+		int count;
+		for (count = 0; count < num_of_sectors; count++) {
+			strcpy(&(disk[count][phaddr.cyl][phaddr.head][phaddr.sect]),value);
+			
 		}
 
-		int logical_address2 = phys_to_log(phys);
-		printf("physical to logical address: %d\n", logical_address2);
 
-		if (logical_address == logical_address2) {
-			printf("pass\n");
-		} else {
-			printf("fail\n");
-		}
-		printf("\n");
-		free(phys);
+		return 0;
 	}
-
+	return -1;
 }
 
-void read_write_test() {
+void test() {
+	srand (time (NULL));
 
-	char *random = "Hello world!!";
-	char *random2 = malloc(strlen(random));
+
+
+
+	physical_address *phys = malloc(sizeof(physical_address));
+
+	printf("\t:::::Conversion test:::::\n");
 
 	int logical_address = rand() % MAX_LOGICAL_SECTOR;
-	write(logical_address,2,(void*)random);
-	read(logical_address,2,(void*)random2);
+	printf("Random logical address: %d\n", logical_address);
+	log_to_phys(logical_address, phys);
+	printf("From logical address (%d)  to physical  (c: %d, h: %d, s: %d)\n", logical_address, phys->cyl, phys->head, phys->sect);
+	int logical_address1 = phys_to_log(phys);
+	printf("Physical to logical address: %d\n", logical_address1);
+	(logical_address == logical_address1)? printf("Pass\n") : printf("Fail\n");
 
-	if(strcpy(random,random2) == 0){
-		printf("pass\n");
-	}else{
-		printf("fail\n");
-	}
+	printf("---------------------------------------------------------------------------------\n");
+
+	printf("\t:::::Read/Write test:::::\n");
+	int address = rand() % MAX_LOGICAL_SECTOR;
+	char *to_write = malloc(sizeof(char) * SECT_SIZE);
+	char *to_read = malloc(sizeof(char) * SECT_SIZE);
+	int sects = (strlen(to_write) / SECT_SIZE) + 1;
+
+	random_string(to_write, 40);
+	printf("Random string generated \"%s\". Wrote string to address %d \n", to_write, address);
+	write(address, sects, to_write);
+	read(address, sects, (void**)to_read);
+	printf("Reading \"%s\" from address %d.\n", to_read, address);
+	(strcmp(to_read,to_write) == 0)? printf("Pass\n") : printf("Fail\n");
 
 }
+
+
+
+
+
+bool is_valid(int logical_block_num, int num_of_sects) {
+
+	if ((logical_block_num < 0 || logical_block_num >= MAX_LOGICAL_SECTOR)
+	        || (num_of_sects < 0 || num_of_sects > NUM_OF_SECTS)) {
+
+		return false;
+	}
+	return true;
+}
+
+void random_string(char *buffer, int length) {
+	srand (time (NULL));
+
+	char alpha[50] = "abcdefghijklmnopqrstuvwxyz";
+
+	int count;
+	
+
+	for (count = 0; count < (length-1); ++count) {
+
+		buffer[count] = alpha[rand() % 26];
+	}
+	buffer[length + 1] = '\0';
+
+}
+
+
 
 int main(void) {
 
-	//convert_test();
-	read_write_test();
+	test();
+
 
 }

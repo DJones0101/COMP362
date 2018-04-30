@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <time.h>
+#include <math.h>
 
 #ifndef _disk_h_ 
 #define _disk_h_
@@ -31,7 +34,7 @@ typedef struct phys_addr {
 	int sect;
 } physical_address;
 
-char *disk[NUM_OF_HEADS * NUM_OF_CYLS * NUM_OF_SECTS * SECT_SIZE];
+disk_t disk;
 
 /**This function translates a logical to a physical address.
 https://en.wikipedia.org/wiki/Logical_block_addressing**/
@@ -48,9 +51,10 @@ int read(int logical_block_num, int num_of_blocks, void **buffer);
 /**This function copies num_of_sectors sectors from the buffer to the disk
 starting at sector pointed to by logical_block_num. Here, you also should
 validate the parameters.**/
-int write(int logical_block_num, int num_of_sectors, void *buffer);
+int write(int logical_block_num, int num_of_blocks, void *buffer);
 
-void convert_test();
-void read_write_test();
+void test();
+bool is_valid(int logical_block_num, int num_of_sects);
+void random_string(char *buffer, int length);
 
 #endif 

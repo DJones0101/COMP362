@@ -1,13 +1,16 @@
-# Usage :
-# [make] -> compiles
-# [make run ]-> runs the exe
-# [make clean] -> removes the exe
+# Darius Jones
 
 all: disk.c 
-	gcc -g -Wall disk.c disk.h -o disk
+	gcc -g -Wall *.c disk.h -o disk -lm
 
 clean: 
 	$(RM) disk
+	$(RM) core
+	clear
 
 run: disk
-	./disk 
+	./disk
+
+debug:
+	gdb disk core
+
