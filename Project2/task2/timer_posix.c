@@ -1,3 +1,9 @@
+/*
+* Darius Jones
+* Project 2 task 1
+* 4/26/2018
+*/
+
 #include <stdio.h>
 #include <time.h>
 #include <signal.h>
@@ -13,38 +19,45 @@ void test() {
 	time_t rawtime;
 	struct tm * timeinfo;
 	time ( &rawtime );
-	srand(time(&rawtime));
 	timeinfo = localtime ( &rawtime );
 	char *string = malloc(sizeof(char) * SECT_SIZE);
-	random_string(string, 15);
-	int event = rand() % 1;
-	int address = rand() % MAX_LOGICAL_SECTOR;
-	int sects = (strlen(string) / SECT_SIZE) + 1;
+	char *string2 = malloc(sizeof(char) * SECT_SIZE);
+	memset(string,'\0', strlen(string));
+	memset(string2,'\0', strlen(string2));
 
-	physical_address phys;
-	log_to_phys(address, &phys);
+	int event = rand() % 2;
+	
+	//int sects = (strlen(string) / SECT_SIZE) + 1;
 
-	printf("Random string generated \"%s\".\n", string);
-	printf("Logical address: %d\n", address);
-	printf("Physical address (%d, %d, %d)\n", phys.head, phys.cyl, phys.sect);
-	printf ( "%s\n", asctime (timeinfo) );
+	physical_address *phys = malloc(sizeof(physical_address));
+	
+
+	//printf("Random string generated \"%s\".\n", string);
 
 	if (event == 1) {
-
-		read(address, sects, (void**)string);
-		printf("Read string \"%s\".\n", string);
-
+		physical_address *phys = malloc(sizeof(physical_address));
+		int address = (rand() % MAX_LOGICAL_SECTOR) + 1;
+		log_to_phys(address, phys);
+		read(address, 1, (void**)string);
+		printf("Reading string \"%s\"\nFrom Physical address: (%d, %d, %d)\nLogical address: %d\n", string, phys->head, phys->cyl, phys->sect, address);
+		printf ( "%s\n", asctime (timeinfo) );
 
 
 	} else if (event == 0) {
-
-		printf("Wrote string \"%s\".\n", string);
-		write(address, sects, string);
+		physical_address *phys = malloc(sizeof(physical_address));
+		int address = (rand() % MAX_LOGICAL_SECTOR) + 1;
+		log_to_phys(address, phys);
+		random_string(string2, 15);
+		printf("Wrote string \"%s\"\nTo Physical address: (%d, %d, %d)\nLogical address: %d\n", string2, phys->head, phys->cyl, phys->sect, address);
+		write(address, 1, string2);
+		printf ( "%s\n", asctime (timeinfo) );
 
 	}
 
 	free(string);
-	
+	free(string2);
+	free(phys);
+
 
 }
 
@@ -74,6 +87,7 @@ void timer_callback(int sig) {
 }
 
 int main(int ac, char **av) {
+	srand( (unsigned) time(NULL) );
 	(void) signal(SIGALRM, timer_callback);
 	start_timer();
 	while (count >= 0);

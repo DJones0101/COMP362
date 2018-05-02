@@ -1,0 +1,66 @@
+/*
+* Darius Jones
+* Project 2 task 1
+* 4/26/2018
+*/
+
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task2$ make
+gcc -g -Wall *.c disk.h -o disk -lm -lrt 
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task2$ make run
+./disk
+Reading string ""
+From Physical address: (0, 0, 2)
+Logical address: 1
+Tue May  1 19:26:06 2018
+
+Wrote string "tivkggsqcgugmn"
+To Physical address: (0, 0, 5)
+Logical address: 4
+Tue May  1 19:26:07 2018
+
+Reading string ""
+From Physical address: (0, 0, 6)
+Logical address: 5
+Tue May  1 19:26:08 2018
+
+Reading string ""
+From Physical address: (0, 0, 6)
+Logical address: 5
+Tue May  1 19:26:09 2018
+
+Wrote string "spmqoolkzsjvae"
+To Physical address: (0, 0, 3)
+Logical address: 2
+Tue May  1 19:26:10 2018
+
+Reading string "spmqoolkzsjvae"
+From Physical address: (0, 0, 3)
+Logical address: 2
+Tue May  1 19:26:11 2018
+
+Wrote string "wpgqxsgumjewcw"
+To Physical address: (0, 0, 5)
+Logical address: 4
+Tue May  1 19:26:12 2018
+
+Wrote string "ocdcmduwauchcp"
+To Physical address: (0, 0, 6)
+Logical address: 5
+Tue May  1 19:26:13 2018
+
+Reading string "wpgqxsgumjewcw"
+From Physical address: (0, 0, 5)
+Logical address: 4
+Tue May  1 19:26:14 2018
+
+Wrote string "qdhyyvierkcfzs"
+To Physical address: (0, 0, 5)
+Logical address: 4
+Tue May  1 19:26:15 2018
+
+Wrote string "uwkoukkxrmoamu"
+To Physical address: (0, 0, 6)
+Logical address: 5
+Tue May  1 19:26:16 2018
+
+darius@dj:~/Desktop/COMP362/COMP362/Project2/task2$ 

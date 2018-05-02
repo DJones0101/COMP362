@@ -36,13 +36,15 @@ int phys_to_log(physical_address *phys_address) {
 int read(int logical_block_num, int num_of_blocks, void **buffer) {
 
 	if (is_valid(logical_block_num, num_of_blocks) == true) {
+		memset((char*)buffer,'\0', strlen((char*)buffer));
 		physical_address phaddr;
 		log_to_phys(logical_block_num, &phaddr);
 		int count;
 
 		for (count = 0; count < num_of_blocks; count++) {
-			strcpy(((char *)buffer), &(disk[count][phaddr.cyl][phaddr.head][phaddr.sect]));
+			strcpy(((char *)buffer), &(disk[phaddr.cyl][phaddr.head][phaddr.sect][count]));
 		}
+		 
 		return 0;
 
 
@@ -62,10 +64,10 @@ int write(int logical_block_num, int num_of_sectors, void *buffer) {
 		strcpy(value, buffer);
 		int count;
 		for (count = 0; count < num_of_sectors; count++) {
-			strcpy(&(disk[count][phaddr.cyl][phaddr.head][phaddr.sect]), value);
+			strcpy(&(disk[phaddr.cyl][phaddr.head][phaddr.sect][count]), value);
 
 		}
-
+		memset(buffer,'\0', strlen(buffer)); 
 		free(value);
 		return 0;
 	}
@@ -93,7 +95,7 @@ void random_string(char *buffer, int length) {
 
 	for (count = 0; count < (length - 1); ++count) {
 
-		buffer[count] = alpha[random() % 26];
+		buffer[count] = alpha[rand() % 26];
 	}
 	buffer[length + 1] = '\0';
 

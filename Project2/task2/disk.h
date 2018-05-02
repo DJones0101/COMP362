@@ -17,7 +17,7 @@
 #define NUM_OF_SECTS 32
 #define NUM_OF_CYLS 16
 #define NUM_OF_HEADS 10
-#define MAX_LOGICAL_SECTOR 5120 
+#define MAX_LOGICAL_SECTOR 5
 #define VALID 0
 #define INVALID 1
 
