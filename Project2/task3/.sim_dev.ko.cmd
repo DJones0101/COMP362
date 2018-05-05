@@ -1,0 +1,1 @@
+cmd_/home/darius/Desktop/COMP362/COMP362/Project2/task3/sim_dev.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/darius/Desktop/COMP362/COMP362/Project2/task3/sim_dev.ko /home/darius/Desktop/COMP362/COMP362/Project2/task3/sim_dev.o /home/darius/Desktop/COMP362/COMP362/Project2/task3/sim_dev.mod.o ;  true

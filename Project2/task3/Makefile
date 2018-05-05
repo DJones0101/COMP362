@@ -1,3 +1,4 @@
+
 UNAME	:= $(shell uname -r)
 KDIR	:= /lib/modules/$(UNAME)/build
 PWD	:= $(shell pwd)
@@ -15,4 +16,10 @@ clean::
 	$(RM) test_sim_dev 
 	$(MAKE) -C $(KDIR) M=$(PWD) clean
 	clear
+
+run:
+	./test_sim_dev
+
+mess:
+	dmesg tail
 
