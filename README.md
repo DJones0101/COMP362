@@ -1,7 +1,7 @@
 #COMP362
 
 
-#Lab 02 
+# Lab 02 
 
 Question 1
 5 / 5 pts
@@ -230,7 +230,7 @@ Submit in a zip file:
     A typescript showing you run some variation of each of those example commands.
     Your sub.c file
 
-#Lab 03 
+# Lab 03 
 
  Question 1
 10 / 10 pts
@@ -621,7 +621,7 @@ int main(int argc, char *argv[])
 }
 
 
-#Lab 05 
+# Lab 05 
 
  Question 1
 15 / 15 pts
@@ -854,7 +854,7 @@ Additional Notes:
 Implement your program in such a way that the scheduling algorithm just selects which process should worked on, while the main actually decremements the work needed to be done.
 
 
-#Lab 06 
+# Lab 06 
 
  Question 1
 10 / 10 pts
@@ -955,7 +955,7 @@ Generate a random number and use it in a delay in lieu of the eating time.
 
 NOTE: Your implementation MUST follow this guideline.
 
-Lab 07 
+# Lab 07 
  Question 1
 95 / 100 pts
 Overview:
@@ -1213,7 +1213,7 @@ Exiting the program.
 
 Some of your messages are off for adding edges as well as allowing edges to connect to nonexistent vertices -5. 
 
-#Lab 08 
+# Lab 08 
 
 
 Question 1
@@ -1330,7 +1330,7 @@ gcc -rdynamic -o testDyLibMain testDyLibMain.c -L. -lgiveMeNum -ldl
 
 Submit all the source code files, output from your program, a log from the compilation session, and a log from the testing session.
 
-#Lab 09 
+# Lab 09 
 
  Question 1
 10 / 10 pts
@@ -1426,7 +1426,7 @@ You will need to submit the following:
     typescript.txt containing several runs with different page reference sequences.
 
 
-#Project 01 
+# Project 01 
 
  Question 1
 20 / 20 pts
@@ -1634,7 +1634,138 @@ UnansweredQuestion 6
 6.5 / 15 pts
 Implement the FUSE support for the hierarchical structure (directories) of the file system. 
 
-#Project 02 
+# Project 02 
+
+ Question 1
+Not yet graded / 25 pts
+
+Implement a disk simulator that allows for writing and reading using logical linear addresses. Logical addresses will need to be translated into physical addresses assuming that the disk is organized as shown in the disk.hPreview the document file; the file also includes signatures of functions to implement.
+
+Assume that a logical block is the same size as a sector.
+
+HINT: First, test the translation in a while loop that generates a random logical address. Use log_to_phys() and phys_to_log() to verify that you have a correct translation in both ways. Then implement the write() and read() functions.
+
+ Question 2
+Not yet graded / 20 pts
+
+This task has to be done on Linux.
+
+Download the attached timer_posix.c. Examine the code and then compile it as follows:
+
+$ gcc timer_posix.c -lrt -o timer
+
+Run the program and make sure that you understand what it does, and how it does it.
+
+Using the code from timer_posix.cPreview the document enhance your test program for the disk simulator so it periodically calls your disk simulator with a random timeout. Each time the test program should generate a random disk reference (logical block numbers) with a random number of blocks to write or read (toss a coin as well), and some random content. The generated content to write should be printable, so use only alphanumerics.
+
+Each time an action is taken, print:
+
+    its type (read or write),
+    written or read content,
+    logical block number,
+    corresponding head, track and sector, and
+    time of the operation.
+
+
+ Question 3
+Not yet graded / 30 pts
+
+This assignment must be done on Linux.
+
+In this part, you will implement a device driver for a block-based device. The device will be simulated by software.
+
+The driver will be installed as a Linux module, and the device will be accessed by opening the corresponding entry in the "/dev" directory.
+
+Start with downloading the sim_dev.zip file, decompressing it, compiling the code, and then running it.
+
+You will need kernel headers and possibly some other essential elements of Linux development packages, so do the following:
+
+$ sudo apt-get install linux-headers-$(uname -r)
+$ sudo apt-get install build-essential
+
+Stick to the good rules of software engineering: keep declarations before any code, since you may get the following error:
+
+error: ISO C90 forbids mixed declarations and code
+
+Go to the "sim_dev" directory and build the module and the test application using make facility (Links to an external site.)Links to an external site.:
+
+$ make
+
+Please note that the file that is used by make, called Makefile, is prepared to accept multiple object files, so you can use multiple .c files. You just need to add a corresponding .o file to obj-m in Makefile as follows:
+
+obj-m += simdev.o
+simdev-objs := sim_dev.o disk.o
+
+Now, you can install the module. It will be easier to do the following commands as a root; alternatively, you can precede each command with "sudo". First, you need a password for "root". Please note that this is not advisable to use "root" account dur to security risks. You are pros now, so here you go:
+
+$ sudo insmod sim_dev.ko
+
+The module should be istalled now. You can verify that by:
+
+$ lsmod
+
+You need the pseudofile for communication with the device driver inside the module. Here is how you can create it:
+
+$ sudo mknod /dev/sim_dev c 567 0
+
+Note that the name and the numbers must match the code.
+
+Now you are ready to run tests:
+
+$ sudo chmod a+w /dev/sim_dev
+$ ./test_sim_dev
+
+If you get responses as coded in the program, you are set for the changes. Here is what you will implement:
+
+Modify the sim_dev_unlocked_ioctl() so it controls the simulated disk that you have just implemented. Read:
+
+http://www.cs.cf.ac.uk/Dave/C/node13.html#SECTION001321000000000000000 (Links to an external site.)Links to an external site.
+
+to learn how to use a packed C struct for that. In this task, you must use bit packing, but you may not need all bit; just leave them unused. The control data should include head, track, sector, and the number of sectors to read. That data will be used by the read or write function.
+
+The actual reading and writing will be done by sim_dev_read() and sim_dev_write() that you need to modify. When reading, take the values from the control word, verify their validity, and then copy the content from disk to the buffer pointed to by the parameter of the read function. Set a return status word that the user of the read function can get through the reading form of sim_dev_ioctl(). For example, if the disk coordinates are invalid, you can set some error code for that. If the number of sectors is invalid, then you can set another error code. Your test application should check the status after reading or writing, especially, if there is an error.
+
+Modify also sim_dev_write(), so that data from the buffer provided as the parameter is copied to the disk space indicated by the control word set using sim_dev_ioctl(). In your test program, remember to check the status by examining the status word that can be read by the sim_dev_ioctl().
+
+You can unload module from Linux kernel by:
+
+> sudo rmmod sim_dev
+
+You can remove the pseudo-file just like a plain file:
+
+> sudo rm /dev/sim_dev
+
+Try to run the test program again. What is the result?
+
+NOTE:
+
+You may find the following articles useful:
+
+    http://www.freeos.com/articles/2677/ (Links to an external site.)Links to an external site.
+    http://www.freesoftwaremagazine.com/articles/drivers_linux (Links to an external site.)Links to an external site.
+    http://tldp.org/LDP/lkmpg/2.6/html/lkmpg.html (Links to an external site.)Links to an external site.
+    http://www.cyberciti.biz/tips/compiling-linux-kernel-module.html (Links to an external site.)Links to an external site.
+    http://stackoverflow.com/questions/817487/compile-linux-kernel-2-6-module-including-non-kernel-headers (Links to an external site.)Links to an external site.
+
+NOTE: You cannot use any libraries in anything that attaches to the kernel, so forget about stdlib.h, stdio.h, and so on. Simply, remove the includes and substitute the functions with matching counterparts from Linux Kernel API (Links to an external site.)Links to an external site.. Use the functions from the examples: printk(), copy_to_user(), copy_from_user(), kmalloc(), etc. If you need something more exotic, then you need to search Linux headers: most likely you will find something similar, since there were others before you, who needed all sorts of things, and they added those solutions to the kernel code. For the same reason, you must not have floating point operations, since that needs a library; you have to avoid floats.
+
+NOTE: Debugging kernel is tricky. Remember that printk() will send printouts to system logs that you can access through:
+
+> dmesg
+
+or
+
+> dmesg tail
+
+
+
+ Question 4
+Not yet graded / 25 pts
+
+Split test_sim_dev into two: a writing and a reading application. You should be able to run both at the same time from two terminals. One should open sim_dev for reading and the other should do it for writing. The reading app should use a timer to periodically poll the device's status that should indicate if the data is ready to read after it has been written by the writing application. The writing application should try to write to the device at random intervals using a timer. The writer should never overwrite data that was not read by the reader, and the reader should not read any data twice. The synchronization should be done through returning the status of the device through the communication port.
+
+NOTE: In this task, it is not important what is written except for the control and status information.
+
 
 
 
