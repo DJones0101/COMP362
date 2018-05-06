@@ -1,9 +1,9 @@
-# COMP362
-Projects and Labs from 362
+#COMP362
 
-Lab 02 
 
- Question 1
+#Lab 02 
+
+Question 1
 5 / 5 pts
 In this task you will be debugging the attached file (coredump.cPreview the document) using the following steps:
 
@@ -113,7 +113,6 @@ Submit in a zip file:
     A typescript showing each of the above steps.
     A safe version of the attached code.
 
-DariusJonesLab2Task2.zip
 Do not used fixed size malloc's when the size of the thing you are mallocing can be easily determined.
  
 Question 3
@@ -231,7 +230,7 @@ Submit in a zip file:
     A typescript showing you run some variation of each of those example commands.
     Your sub.c file
 
-Lab 03 
+#Lab 03 
 
  Question 1
 10 / 10 pts
@@ -275,7 +274,7 @@ $ ps | grep iam
 Then, run your gdb (you may need to do that with sudo):
 
 $ sudo gdb -p <process id> iam
-DariusJonesLab3Task1.zip
+
  
 Question 2
 15 / 15 pts
@@ -318,7 +317,7 @@ $ man fgets
 
 
 
-DariusJonesLab3Task2.zip
+
 Nice I/O though the order sometimes got jumbled, but it was easy to see what was happening.
  
 Question 3
@@ -482,7 +481,7 @@ Required Headers:
 
 All programs should include the following three header files, which are found in /usr/include/sys: ipc.h, types.h, and msg.h.
 
-Lab 04 
+#Lab 04 
  Question 1
 20 / 20 pts
 The Task:
@@ -500,8 +499,7 @@ Useful Resources on Threads:
     http://www.yolinux.com/TUTORIALS/LinuxTutorialPosixThreads.html (Links to an external site.)Links to an external site.
     https://computing.llnl.gov/tutorials/pthreads (Links to an external site.)Links to an external site.
 
- 
-DariusJonesLab4Task1.zip
+
  
 Question 2
 40 / 40 pts
@@ -623,7 +621,7 @@ int main(int argc, char *argv[])
 }
 
 
-Lab 05 
+#Lab 05 
 
  Question 1
 15 / 15 pts
@@ -674,7 +672,6 @@ You may find it useful to use input redirection for this lab:
 In this way, you can create repeatable substantial input data streams without the need to write file operations in the code.
 
 The content of input.txt will be input into the program as if it was typed from the keyboard.
-DariusJonesLab5Task1.zip
  
 Question 2
 13 / 15 pts
@@ -757,23 +754,23 @@ $ sudo su
 
 Change the hard ceiling for the "real-time" priority limit to 99:
 
-# ulimit -Hr 99
+ulimit -Hr 99
 
 Actually change the "real-time" priority limit itself to 99:
 
-# ulimit -Sr 99
+ ulimit -Sr 99
 
 Similarly, change the hard ceiling for scheduling priority limit to 99:
 
-# ulimit -He 99
+ ulimit -He 99
 
 Change the scheduling priority limit itself to 99:
 
-# ulimit -Se 99
+ ulimit -Se 99
 
 Then run your program:
 
-# ./l5t2
+ ./l5t2
 Submission
 
 The following must be provided in your submission:
@@ -784,7 +781,7 @@ The following must be provided in your submission:
         What patterns did you see in the countdown completion rates?
         Is this what you expected?
 
-DariusJonesLab5Task2.zip
+
 You weren't supposed to join the threads nor print stuff all the time, this is what caused what you were explaining in the commentary probably -2
  
 Question 3
@@ -857,7 +854,7 @@ Additional Notes:
 Implement your program in such a way that the scheduling algorithm just selects which process should worked on, while the main actually decremements the work needed to be done.
 
 
-Lab 06 
+#Lab 06 
 
  Question 1
 10 / 10 pts
@@ -876,7 +873,7 @@ Lab 06
 
 
 
-DariusJonesLab6Task1.zip
+
  
 Question 2
 30 / 30 pts
@@ -1213,10 +1210,10 @@ Enter a command: check
 Enter a command: quit
 Exiting the program.
 
-DariusJonesLab7Task1.zip
+
 Some of your messages are off for adding edges as well as allowing edges to connect to nonexistent vertices -5. 
 
-Lab 08 
+#Lab 08 
 
 
 Question 1
@@ -1284,7 +1281,7 @@ Submit a log from the session in which you followed all instructions from this e
 
 
 
-DariusJonesLab8Task2.zip
+
  
 Question 3
 54 / 60 pts
@@ -1333,7 +1330,7 @@ gcc -rdynamic -o testDyLibMain testDyLibMain.c -L. -lgiveMeNum -ldl
 
 Submit all the source code files, output from your program, a log from the compilation session, and a log from the testing session.
 
-Lab 09 
+#Lab 09 
 
  Question 1
 10 / 10 pts
@@ -1347,8 +1344,6 @@ Compile and run the code tin memoryMappedFile.cPreview the document. Use a mediu
 
 Read the man page for mmap. Then, change the code, so after printing the character at the offset, it is substituted with a character from the standard input. After the substitution, the code should print the character at the offset (from the file, and not from the input) once more. Hint: Pay attention to the permission mode with which the file is opened and mapped.
 
- 
-DariusJonesLab9Task1.zip
  
 Question 2
 35 / 35 pts
@@ -1431,7 +1426,7 @@ You will need to submit the following:
     typescript.txt containing several runs with different page reference sequences.
 
 
-Project 01 
+#Project 01 
 
  Question 1
 20 / 20 pts
@@ -1507,7 +1502,7 @@ Implement functions to:
 Please do not jump ahead of things: You will work on file operations like open(), read(), write(), etc., in the next installments of the assignment; do not worry about that for now; instead focus on managing the meta-data of files.
 
 In the submission of your code, logs, test runs, etc., do not forget to provide a detailed commentary on your design choices.
-DariusJonesProject1Task1.zip
+
  
 Question 2
 16 / 20 pts
@@ -1583,7 +1578,7 @@ Mostly there
 Question 3
 10 / 10 pts
 Please click on the following link with the FUSE tutorial proj1s1.html (it is too long for Canvas to accept) and follow all the steps.
-DariusJonesProject1Task3.zip
+
  
 Question 4
 15 / 15 pts
@@ -1596,7 +1591,7 @@ Taking hellofs-ubuntu.c from the tutorial from task 1 as the starting point, wri
     a fourth file that returns random strings of random length (you can fake the size in hello_getattr()).
 
 Submit the code of your file system and a log of a session in which you mount your file system at a mount point called myfs and then run the bash script in the test_myfs.sh file. Please note that you need to make the file executable; recall from the lecture notes how to do that.
-DariusJonesProject1Task4.zip
+
  
 UnansweredQuestion 5
 0 / 20 pts
@@ -1639,7 +1634,7 @@ UnansweredQuestion 6
 6.5 / 15 pts
 Implement the FUSE support for the hierarchical structure (directories) of the file system. 
 
-Project 02 
+#Project 02 
 
 
 
