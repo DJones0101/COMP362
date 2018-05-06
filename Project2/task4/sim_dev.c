@@ -30,6 +30,36 @@ static REGISTER *disk_status = (REGISTER *) &ioctl_status_data;
 static REGISTER *disk_control = (REGISTER *) &ioctl_control_data;
 
 
+static int is_valid(REGISTER *reg) {
+	if (!reg->ready) {
+		printk(KERN_DEFAULT "not ready");
+		reg->error_code = E_RDY;
+		return E_RDY;
+	}
+	if (reg->cyl >= NUM_OF_CYLS) {
+		printk(KERN_DEFAULT "Invalid cyl\n");
+		reg->error_code = E_CYL;
+		return E_CYL;
+	}
+	if (reg->head >= NUM_OF_HEADS) {
+		printk(KERN_DEFAULT "Invalid head\n");
+		reg->error_code = E_HEAD;
+		return E_HEAD;
+	}
+	if (reg->sect >= NUM_OF_SECTS) {
+		printk(KERN_DEFAULT "Invalid sect\n");
+		reg->error_code = E_HEAD;
+		return E_HEAD;
+	}
+	if (reg->sector_count == 0 || reg->sector_count >= NUM_OF_SECTS) {
+		reg->error_code = E_SECTCOUNT;
+		printk(KERN_DEFAULT "Invalid sector count\n");
+		return E_SECTCOUNT;
+	}
+	return 0;
+}
+
+
 // open function - called when the "file" /dev/sim_dev is opened in userspace
 static int sim_dev_open (struct inode *inode, struct file *file) {
 	// this is a special print functions that allows a user to print from the kernel
@@ -201,34 +231,7 @@ static void sim_dev_cleanup_module(void) {
 	printk(KERN_INFO"Simulated Driver Module Uninstalled\n");
 }
 
-static int is_valid(REGISTER *reg) {
-	if (!reg->ready) {
-		printk(KERN_DEFAULT "not ready");
-		reg->error_code = E_RDY;
-		return E_RDY;
-	}
-	if (reg->cyl >= NUM_OF_CYLS) {
-		printk(KERN_DEFAULT "Invalid cyl\n");
-		reg->error_code = E_CYL;
-		return E_CYL;
-	}
-	if (reg->head >= NUM_OF_HEADS) {
-		printk(KERN_DEFAULT "Invalid head\n");
-		reg->error_code = E_HEAD;
-		return E_HEAD;
-	}
-	if (reg->sect >= NUM_OF_SECTS) {
-		printk(KERN_DEFAULT "Invalid sect\n");
-		reg->error_code = E_HEAD;
-		return E_HEAD;
-	}
-	if (reg->sector_count == 0 || reg->sector_count >= NUM_OF_SECTS) {
-		reg->error_code = E_SECTCOUNT;
-		printk(KERN_DEFAULT "Invalid sector count\n");
-		return E_SECTCOUNT;
-	}
-	return 0;
-}
+
 
 
 // map the module initialization and cleanup functins

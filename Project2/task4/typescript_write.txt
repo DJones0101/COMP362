@@ -1,0 +1,59 @@
+/*
+* Darius Jones
+* Project 2 task 4
+* 5/5/2018
+*/
+
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task4# make write
+gcc write_test.c -g -lrt -Wall -o write_test
+./write_test
+write started
+Sat May  5 15:05:03 2018
+
+Writing random string "paxruydptcgwvn" to address 2 
+Sat May  5 15:05:04 2018
+
+Writing random string "phcmvjdkuagkld" to address 1 
+Sat May  5 15:05:05 2018
+
+Writing random string "wufvlbtoqotyko" to address 4 
+Sat May  5 15:05:06 2018
+
+Writing random string "ydtbsqmxbhxjrk" to address 4 
+Sat May  5 15:05:07 2018
+
+Writing random string "yijdfwgynwpgvz" to address 4 
+Sat May  5 15:05:08 2018
+
+Writing random string "gaabdusprvwqeq" to address 2 
+Sat May  5 15:05:09 2018
+
+Writing random string "solbuqyarlzgru" to address 3 
+Sat May  5 15:05:10 2018
+
+Writing random string "lchnekhyaytwox" to address 2 
+Sat May  5 15:05:11 2018
+
+Writing random string "rpferzurzlcarv" to address 3 
+Sat May  5 15:05:12 2018
+
+Writing random string "zizgwdrdbtewrs" to address 1 
+Sat May  5 15:05:13 2018
+
+Writing random string "glilpbmksnxwor" to address 3 
+Sat May  5 15:05:14 2018
+
+Writing random string "ischaamtdpmhle" to address 4 
+Sat May  5 15:05:15 2018
+
+Writing random string "gkprxfsjrnwqlk" to address 4 
+Sat May  5 15:05:16 2018
+
+Writing random string "fvbjecjtvmkkwy" to address 0 
+Sat May  5 15:05:17 2018
+
+Writing random string "aearvzwqipfgis" to address 2 
+Sat May  5 15:05:18 2018
+
+Writing random string "rxqvgwxrpugcge" to address 0 
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task4# 

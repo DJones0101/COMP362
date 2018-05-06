@@ -1,6 +1,6 @@
 /*
 * Darius Jones
-* Project 2 task 3
+* Project 2 task 4
 * 5/5/2018
 */
 
@@ -46,8 +46,11 @@ typedef struct {
      unsigned sector_count:5;
 }REGISTER;
 
-static int is_valid(REGISTER *reg); 
+//static int is_valid(REGISTER *reg); 
 int log_to_phys(int logaddr, physaddr_t *phaddr);
 void error_code(int ret_val);
+//static ssize_t sim_dev_write( struct file *filp, const char __user *buf, size_t count, loff_t *f_pos);
+//static ssize_t sim_dev_read( struct file *filp, char __user *buf, size_t count, loff_t *f_pos);
+void random_string(char *buffer, int length);
 
 #endif

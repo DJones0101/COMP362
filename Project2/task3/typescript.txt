@@ -1,0 +1,24 @@
+/*
+* Darius Jones
+* Project 2 task 3
+* 5/5/2018
+*/
+
+If you are using Ubuntu 16.xx please comment out "#include <linux/uaccess.h>", line 14 and uncomment "#include <asm/uaccess.h>", line 13. If you are using Ubuntu 17.10+ it should work as is.
+
+
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# make
+make -C /lib/modules/4.13.0-39-generic/build M=/home/darius/Desktop/COMP362/COMP362/Project2/task3 modules
+make[1]: Entering directory '/usr/src/linux-headers-4.13.0-39-generic'
+  Building modules, stage 2.
+  MODPOST 1 modules
+make[1]: Leaving directory '/usr/src/linux-headers-4.13.0-39-generic'
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# sudo insmod sim_dev.ko
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# mknod /dev/sim_dev c 567 0
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# chmod a+w /dev/sim_dev
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# make run
+./test_sim_dev
+'Skeleton Kernel test' wrote to /dev/sim_dev
+'Skeleton Kernel' read from /dev/sim_dev
+'Skeleton Kernel test' read from /dev/sim_dev
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task3# 

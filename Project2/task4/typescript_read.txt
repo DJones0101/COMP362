@@ -1,0 +1,44 @@
+/*
+* Darius Jones
+* Project 2 task 4
+* 5/5/2018
+*/
+
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task4# make read
+gcc read_test.c -g -lrt -Wall -o read_test
+./read_test
+Read started
+Sat May  5 15:05:05 2018
+
+Reading "" from address 3:
+Sat May  5 15:05:06 2018
+
+Reading "" from address 2:
+Sat May  5 15:05:07 2018
+
+Reading "ydtbsqmxbhxjrk" from address 4:
+Sat May  5 15:05:08 2018
+
+Reading "" from address 2:
+Sat May  5 15:05:09 2018
+
+Reading "" from address 4:
+Sat May  5 15:05:10 2018
+
+Reading "anqlklblrhllkt" from address 0:
+Sat May  5 15:05:11 2018
+
+Reading "" from address 4:
+Sat May  5 15:05:12 2018
+
+Reading "" from address 4:
+Sat May  5 15:05:13 2018
+
+Reading "C��" from address 4:
+Sat May  5 15:05:14 2018
+
+Reading "zizgwdrdbtewrs" from address 1:
+Sat May  5 15:05:15 2018
+
+Reading "" from address 2:
+root@dj:/home/darius/Desktop/COMP362/COMP362/Project2/task4#
