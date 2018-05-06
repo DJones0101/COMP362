@@ -1,4 +1,4 @@
-#COMP362
+# COMP362 Labs and projects Spring 2018
 
 
 # Lab 02 
